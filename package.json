@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
+    "mariadb": "^2.5.2",
     "vue": "^2.6.12",
     "vue-hot-reload-api": "^2.3.4",
     "ws": "^7.4.2"

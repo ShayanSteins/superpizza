@@ -1,0 +1,12 @@
+{
+  "dataBase" : {
+    "host": "localhost",
+    "user": "admin",
+    "password": "admin",
+    "database": "superpizza"
+  },
+  "server": {
+    "port": 4040
+  }
+
+}
