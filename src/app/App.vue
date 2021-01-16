@@ -55,7 +55,11 @@ export default {
       menuPizzas: null,
       order: {
         pizzas: new Map(),
-        totalPrice: 0.00
+        totalPrice: 0.00,
+        lastName: 'ted',
+        firstName: 'ted',
+        phone: '00.00.00.00.00',
+        timeSlot: '18:10'
       }
       // order: {
       //   pizzas: new Map([[1, 3], [4, 1], [5, 1]]),

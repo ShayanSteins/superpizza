@@ -6,7 +6,8 @@
       min="0"
       max="30"
       :value="qty"
-      @input="$emit('change', line.id, $event.target.value)"
+      @input="$emit('change', line.id, $event.target.value)" 
+      required
     />
     <span>{{ countPizzasPrice }} €</span>
   </div>
