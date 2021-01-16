@@ -3,44 +3,36 @@
     <header class="shadow">
       <div id="headerTitle" class="bold">Super Pizza</div>
     </header>
-    <div class="loading" v-if="loading">
-      Chargement...
-    </div>
 
-    <ShoppingCart 
-      id="shoppingCartDiv" 
-      :class="{active : isShoppingDisplayed}" 
-      :order="order" 
-      @close="closeShoppingCart">
-    </ShoppingCart>
-
-    <div id="content" :class="{active : !isShoppingDisplayed}" >
-      <div id="cartIcon">
-        <span class="italic small">Notre plateforme vous propose des pizzas de choix à emporter uniquement. Le paiement se fera lors du retrait de la commande.</span>
-        <img :src="getShoppingCart()" class="buttonImg shadow rounded" title="Panier" @click="openShoppingCart"> 
+    <div id="body">
+      <div class="loading" v-if="loading">
+        Chargement...
       </div>
 
-      <div v-if="menuPizzas">
-        <PizzaDisplayer v-for="pizza in menuPizzas" :pizza="pizza" :key="pizza.idPizza" @add-pizza="addPizza"></PizzaDisplayer>
+      <div id="content" :class="{active : !isShoppingDisplayed}" >
+        <div id="cartIcon">
+          <span class="italic small">Notre plateforme vous propose des pizzas de choix à emporter uniquement. Le paiement se fera lors du retrait de la commande.</span>
+          <img :src="getShoppingCart()" class="buttonImg shadow rounded" title="Panier" @click="openShoppingCart"> 
+        </div>
+
+        <div id="menu" v-if="menuPizzas">
+          <PizzaDisplayer v-for="pizza in menuPizzas" :pizza="pizza" :key="pizza.idPizza" @add-pizza="addPizza"></PizzaDisplayer>
+        </div>
       </div>
-    </div>
 
-   
-
-    <!-- <div>
-      <input type="text" v-model="inputText" />
-      <button @click="addPizz">Add</button>
-    </div>
-    <span>Listes des pizzas : {{ pizzas.toString() }}</span>
-  </div> -->
+      <ShoppingCart 
+        id="shoppingCartDiv" 
+        :class="{active : isShoppingDisplayed}" 
+        :order="order" 
+        @close="closeShoppingCart">
+      </ShoppingCart>
+    </div>   
 </template>
 
 <script>
-// const ws = new WebSocket('ws://' + document.location.host)
 import shoppingCartIcon from './assets/shopping_cart.svg'
 import PizzaDisplayer from './components/PizzaDisplayer.vue'
 import ShoppingCart from './components/ShoppingCart.vue'
-// import { setMenuPizzasSave } from './common.js'
 
 
 export default {
@@ -66,9 +58,6 @@ export default {
       //   totalPrice: 0.00
       // }
     }
-  },
-  computed: {
-
   },
   created() {
     this.getMenu()
@@ -107,15 +96,6 @@ export default {
     getShoppingCart() {
       return shoppingCartIcon
     }
-    // addPizz() {
-    //   // console.log('pizza ajoutée')
-    //   this.menuPizzas.push(this.inputText)
-    //   ws.send(this.inputText)
-    //   ws.onmessage = function (msg) {
-    //     console.log('message reçu : ' + msg.data)
-    //   }
-    //   this.inputText = ''
-    // }
   }
 }
 </script>
@@ -194,5 +174,40 @@ header {
   cursor: pointer;
   border-color: var(--main-red-color);
   filter: brightness(0.5);
+}
+
+@media screen and (min-width: 700px) {
+  /* body {
+    background-color: lawngreen;
+  } */
+  #body {
+    display: flex;
+  }
+
+  #cartIcon > span {
+    font-size: 1rem;
+  }
+
+  .buttonImg {
+    display: none;
+  }
+
+  #content {
+    padding: 0.5rem 0rem 0.5rem 0.5rem;
+  }
+  #content.active {
+    width: 70%;
+  }
+
+  #menu {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  #shoppingCartDiv {
+    display: block;
+    width: 30%;
+    border-left: 1px solid var(--main-grey-color);
+  }
 }
 </style>

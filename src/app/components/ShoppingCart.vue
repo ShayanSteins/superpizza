@@ -2,7 +2,7 @@
   <div id="main">
     <div id="title">
       <span>Panier</span>
-      <button @click="$emit('close')">X</button>
+      <button id="closeShoppingCart" @click="$emit('close')">X</button>
     </div>
 
     <div v-if="order.totalPrice > 0">
@@ -42,8 +42,22 @@
 
         <div>
           <span>Vos informations</span>
-          <input type="text" minlength="3" maxlength="30" v-model="order.lastName" placeholder="Nom" required />
-          <input type="text" minlength="3" maxlength="30" v-model="order.firstName"  placeholder="Prénom" required />
+          <input
+            type="text"
+            minlength="3"
+            maxlength="30"
+            v-model="order.lastName"
+            placeholder="Nom"
+            required
+          />
+          <input
+            type="text"
+            minlength="3"
+            maxlength="30"
+            v-model="order.firstName"
+            placeholder="Prénom"
+            required
+          />
           <input
             type="text"
             v-model="order.phone"
@@ -95,7 +109,7 @@ export default {
     },
     checkForm(e) {
       e.preventDefault()
-      ws.send(JSON.stringify({ "head": "newOrder","datas": changeObjectMaptoArray(this.order)}))
+      ws.send(JSON.stringify({ "head": "newOrder", "datas": changeObjectMaptoArray(this.order) }))
     }
   }
 }
@@ -106,5 +120,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+@media screen and (min-width: 700px) {
+  #closeShoppingCart {
+    display: none;
+  }
 }
 </style>

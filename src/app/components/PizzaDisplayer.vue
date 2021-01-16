@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
     <div class="pizzaTitle rounded bold">
       <span>{{ pizza.name }}</span>
       <span class="pizzaPrice">{{ pizza.price }} €</span>
@@ -90,5 +90,12 @@ export default {
 }
 .pizzaImg img {
   width: 100%;
+}
+
+@media screen and (min-width: 700px) {
+  .main {
+    max-width: calc(50% - 0.5rem);
+    padding-right: 0.5rem;
+  }
 }
 </style>
