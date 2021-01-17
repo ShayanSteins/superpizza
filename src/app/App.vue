@@ -48,14 +48,19 @@ export default {
       order: {
         pizzas: new Map(),
         totalPrice: 0.00,
-        lastName: 'ted',
-        firstName: 'ted',
-        phone: '00.00.00.00.00',
-        timeSlot: '18:10'
+        totalQty: 0,
+        lastName: '',
+        firstName: '',
+        phone: '',
+        timeSlot: ''
       }
       // order: {
-      //   pizzas: new Map([[1, 3], [4, 1], [5, 1]]),
-      //   totalPrice: 0.00
+      //   pizzas: new Map(),
+      //   totalPrice: 0.00,
+      //   lastName: 'ted',
+      //   firstName: 'ted',
+      //   phone: '00.00.00.00.00',
+      //   timeSlot: '18:10'
       // }
     }
   },
@@ -79,13 +84,12 @@ export default {
       if (this.order.pizzas.has(idPizz))
         qty = Number(this.order.pizzas.get(idPizz)) + Number(qty)
       this.order.pizzas.set(idPizz, qty)
-      this.calculateTotalOrderPrice()
+      this.calculateTotals()
+      this.$ws.send(JSON.stringify({ "head": "getTimeSlots", "datas": this.order.totalQty }))
     },
-    calculateTotalOrderPrice() {
-      this.order.totalPrice = 0
-      for (const line of this.order.pizzas) {
-        this.order.totalPrice = Number(this.order.totalPrice) + Number(line[1]) * Number(this.$getPizzaPrice(line[0]))
-      }
+    calculateTotals() {
+      this.order.totalPrice = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, true)
+      this.order.totalQty = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, false)      
     },
     openShoppingCart() {
       this.isShoppingDisplayed = true

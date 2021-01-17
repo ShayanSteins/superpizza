@@ -27,12 +27,9 @@
           <span>Veuillez choisir l'heure de retrait : </span>
           <select v-model="order.timeSlot">
             <option disabled value="">...</option>
-            <option>18:10</option>
-            <option>18:20</option>
-            <option>18:30</option>
-            <option>18:40</option>
-            <option>18:50</option>
-            <option>19:00</option>
+            <option v-for="opt in timeSlotsAvailable" :key="opt" :value="opt">
+              {{ opt }}
+            </option>
           </select>
         </div>
 
@@ -75,8 +72,6 @@
 
 <script>
 import LineCart from './LineCart.vue'
-import { changeObjectMaptoArray } from '../utils.js'
-const ws = new WebSocket('ws://' + document.location.host)
 
 export default {
   name: 'ShoppingCart',
@@ -85,10 +80,12 @@ export default {
   },
   created() {
     this.updateTotalOrderPrice()
+    this.getTimeSlots()
   },
   data() {
     return {
-      pizzas: this.order.pizzas
+      pizzas: this.order.pizzas,
+      timeSlotsAvailable: []
     }
   },
   props: {
@@ -100,16 +97,36 @@ export default {
     updateOrderQty(idPizz, qty) {
       this.order.pizzas.set(idPizz, qty)
       this.updateTotalOrderPrice()
+      this.$ws.send(JSON.stringify({ "head": "getTimeSlots", "datas": this.order.totalQty }))
     },
     updateTotalOrderPrice() {
-      this.order.totalPrice = 0
-      for (const line of this.order.pizzas) {
-        this.order.totalPrice = Number(this.order.totalPrice) + Number(line[1]) * Number(this.$getPizzaPrice(line[0]))
-      }
+      this.order.totalPrice = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, true)
+      this.order.totalQty = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, false)
     },
     checkForm(e) {
       e.preventDefault()
-      ws.send(JSON.stringify({ "head": "newOrder", "datas": changeObjectMaptoArray(this.order) }))
+      if(this.order.totalPrice > 0)
+        this.$ws.send(JSON.stringify({ "head": "newOrder", "datas": this.$changeObjectMaptoArray(this.order) }))
+    },
+    getTimeSlots() {
+      this.$ws.onopen = () => {
+        this.$ws.send(JSON.stringify({ "head": "getTimeSlots" }))
+      }
+      this.$ws.onmessage = (msg) => {
+        msg = JSON.parse(msg.data)
+        switch (msg.head) {
+          case 'updateSlots':
+            this.timeSlotsAvailable = msg.datas
+            break;
+
+          case 'updateSlotsRequired':
+            this.$ws.send(JSON.stringify({ "head": "getTimeSlots", "datas": this.order.totalQty }))
+            break;
+        
+          default:
+            break;
+        }
+      }
     }
   }
 }
