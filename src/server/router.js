@@ -1,4 +1,5 @@
 const fs = require('fs')
+const { resolve } = require('path')
 
 const mimeType = {
   css: 'text/css',
@@ -21,7 +22,7 @@ class Router {
   }
 
   handle(req, res) {
-    const fileName = req.url === '/' ? 'index.html' : req.url
+    let fileName = req.url === '/' ? 'app/index.html' : req.url
     const extension = fileName.split('.')[fileName.split('.').length - 1]
     const method = req.method
 
@@ -34,6 +35,12 @@ class Router {
           throw err
         })
       }
+      else if (fileName === '/admin') {
+        fileName = 'admin/admin.html'
+        res.statusCode = 200
+        res.setHeader('Content-Type', mimeType['html'])
+        res.end(fs.readFileSync(this.distPath + fileName))
+      }
       else if (!fs.existsSync(this.distPath + fileName)) {
         res.statusCode = 404
         res.setHeader('Content-Type', 'text/html')
@@ -43,6 +50,23 @@ class Router {
         res.statusCode = 200
         res.setHeader('Content-Type', mimeType[extension])
         res.end(fs.readFileSync(this.distPath + fileName))
+      }
+    }
+    else {
+      if(fileName === '/login') {
+        let body = ''
+        let result = 'OK'
+        req.on('data', (data) => { body += data })
+        req.on('end', () => {
+          console.log(Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString('utf8'))
+          let credentials = JSON.parse(body)
+          if(credentials.id!=='admin' || credentials.pwd!=='admin'){
+            result = 'KO'
+          }
+          res.statusCode = 200
+          res.end(JSON.stringify(result))
+        })
+        req.on('error', (e) => { console.error(e.message) })
       }
     }
   }

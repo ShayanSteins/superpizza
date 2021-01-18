@@ -6,7 +6,7 @@
     </div>
 
     <div v-if="order.totalPrice > 0">
-      <form @submit="checkForm">
+      <form @submit.prevent="checkForm">
         <LineCart
           v-for="[idPizza, qty] of pizzas"
           :line="{ id: idPizza, qty: qty }"
@@ -104,7 +104,6 @@ export default {
       this.order.totalQty = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, false)
     },
     checkForm(e) {
-      e.preventDefault()
       if(this.order.totalPrice > 0)
         this.$ws.send(JSON.stringify({ "head": "newOrder", "datas": this.$changeObjectMaptoArray(this.order) }))
     },
