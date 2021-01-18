@@ -1,44 +1,50 @@
 <template>
-  <div id="main">
+  <div>
     <div id="title">
-      <span>Panier</span>
-      <button id="closeShoppingCart" @click="$emit('close')">X</button>
+      <span class="bold">Panier</span>
+      <button
+        id="closeShoppingCart"
+        class="shadow border"
+        @click="$emit('close')"
+      >
+        X
+      </button>
     </div>
 
-    <div v-if="order.totalPrice > 0">
+    <div v-if="order.totalPrice > 0" id="fullCart">
       <form @submit.prevent="checkForm">
-        <LineCart
-          v-for="[idPizza, qty] of pizzas"
-          :line="{ id: idPizza, qty: qty }"
-          :key="idPizza"
-          :unitPrice="$getPizzaPrice(idPizza)"
-          @change="updateOrderQty"
-        ></LineCart>
-        <div>
-          <span>TOTAL</span>
-          <span>{{ order.totalPrice }} €</span>
+        <div id="cart" class="border rounded">
+          <LineCart
+            v-for="[idPizza, qty] of pizzas"
+            :line="{ id: idPizza, qty: qty }"
+            :key="idPizza"
+            :unitPrice="$getPizzaPrice(idPizza)"
+            @change="updateOrderQty"
+          ></LineCart>
+          <div id="cartTotal" class="bold">
+            <span>TOTAL</span>
+            <span>{{ order.totalPrice }} €</span>
+          </div>
         </div>
 
-        <br /><br /><br />
-        <div>******************************************</div>
-        <br /><br /><br />
+        <div class="separator center">-------------------------</div>
 
         <div>
           <span>Veuillez choisir l'heure de retrait : </span>
-          <select v-model="order.timeSlot">
-            <option disabled value="">...</option>
-            <option v-for="opt in timeSlotsAvailable" :key="opt" :value="opt">
-              {{ opt }}
-            </option>
-          </select>
+          <div class="center">
+            <select v-model="order.timeSlot" id="selectHour">
+              <option disabled value="">...</option>
+              <option v-for="opt in timeSlotsAvailable" :key="opt" :value="opt">
+                {{ opt }}
+              </option>
+            </select>
+          </div>
         </div>
 
-        <br /><br /><br />
-        <div>******************************************</div>
-        <br /><br /><br />
+        <div class="separator center">-------------------------</div>
 
-        <div>
-          <span>Vos informations</span>
+        <div id="customersInfos">
+          <span class="subtitle bold">Vos informations</span>
           <input
             type="text"
             minlength="3"
@@ -63,10 +69,12 @@
             required
           />
         </div>
-        <button>Valider</button>
+        <div class="center">
+          <button id="validBtn" class="bold shadow">Valider</button>
+        </div>
       </form>
     </div>
-    <div v-else>Votre panier est vide.</div>
+    <div v-else id="emptyCart" class="center">Votre panier est vide.</div>
   </div>
 </template>
 
@@ -104,7 +112,7 @@ export default {
       this.order.totalQty = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, false)
     },
     checkForm(e) {
-      if(this.order.totalPrice > 0)
+      if (this.order.totalPrice > 0)
         this.$ws.send(JSON.stringify({ "head": "newOrder", "datas": this.$changeObjectMaptoArray(this.order) }))
     },
     getTimeSlots() {
@@ -121,7 +129,7 @@ export default {
           case 'updateSlotsRequired':
             this.$ws.send(JSON.stringify({ "head": "getTimeSlots", "datas": this.order.totalQty }))
             break;
-        
+
           default:
             break;
         }
@@ -132,11 +140,74 @@ export default {
 </script>
 
 <style scoped>
+#main {
+  padding: 0.5rem;
+}
 #title {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
+
+#closeShoppingCart {
+  border-radius: 56%;
+  background-color: var(--light-white-color);
+  padding: 0.2rem 0.5rem;
+}
+#closeShoppingCart:hover {
+  color: var(--main-grey-color);
+}
+
+.center{
+  text-align: center;
+}
+
+#emptyCart {  
+  margin: 4rem 0;
+}
+
+#cartTotal {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2rem;
+  background-color: var(--light-grey-color);
+  color: var(--main-bg-color);
+}
+
+.separator {
+  margin: 2rem 0;
+  font-family: monospace;
+}
+
+#selectHour {
+  width: 35%;
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+}
+
+#customersInfos {
+  display: flex;
+  flex-direction: column;
+}
+.subtitle {
+  margin-bottom: 0.5rem;
+}
+#customersInfos > input {
+  margin: 0.3rem 1.8rem;
+  height: 1.5rem;
+  font-size: 1.1rem;
+}
+
+#validBtn {
+  margin-top: 1.5rem;
+  padding: 0.8rem 1rem;
+  font-size: 1.2rem;
+  background-color: var(--main-red-color);
+  color: var(--main-bg-color);
+}
+
 @media screen and (min-width: 700px) {
   #closeShoppingCart {
     display: none;

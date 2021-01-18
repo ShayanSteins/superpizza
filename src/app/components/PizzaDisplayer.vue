@@ -10,7 +10,7 @@
       </div>
       <div class="pizzaNoImg">
         <span class="pizzaDesc">{{ pizza.description }}</span>
-        <div>
+        <div class="pizzaAddForm">
           <input
             type="number"
             min="0"
@@ -18,7 +18,7 @@
             v-model.number="qty"
             @input="checkQtyFormat"
           />
-          <button
+          <button class="bold"
             @click="$emit('add-pizza', [pizza.idPizza, qty])"
             :disabled="isIncorrectFormat"
           >
@@ -91,6 +91,14 @@ export default {
 .pizzaImg img {
   width: 100%;
 }
+
+.pizzaAddForm {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+
 
 @media screen and (min-width: 700px) {
   .main {

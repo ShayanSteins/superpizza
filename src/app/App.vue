@@ -12,7 +12,7 @@
       <div id="content" :class="{active : !isShoppingDisplayed}" >
         <div id="cartIcon">
           <span class="italic small">Notre plateforme vous propose des pizzas de choix à emporter uniquement. Le paiement se fera lors du retrait de la commande.</span>
-          <img :src="getShoppingCart()" class="buttonImg shadow rounded" title="Panier" @click="openShoppingCart"> 
+          <img :src="getShoppingCart()" class="buttonImg shadow rounded border" title="Panier" @click="openShoppingCart"> 
         </div>
 
         <div id="menu" v-if="menuPizzas">
@@ -46,7 +46,7 @@ export default {
       isShoppingDisplayed: false,
       menuPizzas: null,
       order: {
-        pizzas: new Map(),
+        pizzas: new Map([[1,2], [5,3]]),
         totalPrice: 0.00,
         totalQty: 0,
         lastName: '',
@@ -89,7 +89,7 @@ export default {
     },
     calculateTotals() {
       this.order.totalPrice = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, true)
-      this.order.totalQty = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, false)      
+      this.order.totalQty = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, false)
     },
     openShoppingCart() {
       this.isShoppingDisplayed = true
@@ -107,9 +107,11 @@ export default {
 <style>
 :root {
   --main-bg-color: rgb(248, 248, 248);
+  --light-white-color: rgb(222, 222, 222);
   --main-green-color: rgb(0 144 69);
   --main-red-color: rgb(208 44 55);
   --main-grey-color: rgb(41 41 41);
+  --light-grey-color: rgb(64 64 64);
   --shadow-element: 2px 2px 4px rgb(21 21 21 / 78%);
 }
 body {
@@ -129,6 +131,11 @@ header {
   text-align: center;
 }
 
+button {
+  border: none;
+  background-color: var(--main-green-color);
+  padding: 0.3rem 0.5rem;
+}
 .italic {
   font-style: italic;
 }
@@ -138,19 +145,19 @@ header {
 .small {
   font-size: 0.8rem;
 }
-.buttonImg {
-  padding: 0.2rem;
-  border: 1px solid var(--main-grey-color);
-}
 .shadow {
   box-shadow: var(--shadow-element);
 }
 .rounded {
   border-radius: 3px;
 }
+.border {
+  border: 1px solid var(--main-grey-color);
+}
 
 #shoppingCartDiv {
   display: none;
+  padding: 0.5rem;
 }
 #shoppingCartDiv.active {
   display: block;
@@ -172,18 +179,17 @@ header {
 #cartIcon > img {
   right: 0;
   margin-left: 0.4rem;
+  padding: 0.2rem;
   background-color: var(--main-green-color);
 }
-#cartIcon > img:hover {
+#cartIcon > img:hover,
+button:hover {
+  filter: brightness(1.2);
   cursor: pointer;
-  border-color: var(--main-red-color);
-  filter: brightness(0.5);
+  color: var(--light-white-color);
 }
 
 @media screen and (min-width: 700px) {
-  /* body {
-    background-color: lawngreen;
-  } */
   #body {
     display: flex;
   }
