@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { resolve } = require('path')
+const { compare } = require('./utils.js')
 
 const mimeType = {
   css: 'text/css',
@@ -8,7 +8,8 @@ const mimeType = {
   html: 'text/html',
   jpeg: 'image/jpeg',
   jpg: 'image/jpeg',
-  svg: 'image/svg+xml'
+  svg: 'image/svg+xml',
+  ico: 'image/x-icon'
 }
 
 class Router {
@@ -21,10 +22,11 @@ class Router {
     this.database = Database
   }
 
-  handle(req, res) {
+  async handle(req, res) {
     let fileName = req.url === '/' ? 'app/index.html' : req.url
     const extension = fileName.split('.')[fileName.split('.').length - 1]
     const method = req.method
+    // console.log(`Nouvelle requete ${method} pour ${fileName}`)
 
     if (method === 'GET') {
       if (fileName === '/initCli') {
@@ -41,6 +43,25 @@ class Router {
         res.setHeader('Content-Type', mimeType['html'])
         res.end(fs.readFileSync(this.distPath + fileName))
       }
+      else if (fileName === '/login') {
+        try {
+          let credentials = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString('utf8')
+          let [username, pwd] = credentials.split(':')
+  
+          let match = await compare(pwd, username)
+          if (match) {
+            res.statusCode = 200
+            res.end(JSON.stringify('OK'))
+          }
+          else {
+            res.statusCode = 400
+            res.end(JSON.stringify(`Erreur lors de l'authentification. Merci de saisir à nouveau vos identifiants.`))
+          }
+          
+        } catch (error) {
+          throw error
+        }
+      }
       else if (!fs.existsSync(this.distPath + fileName)) {
         res.statusCode = 404
         res.setHeader('Content-Type', 'text/html')
@@ -50,23 +71,6 @@ class Router {
         res.statusCode = 200
         res.setHeader('Content-Type', mimeType[extension])
         res.end(fs.readFileSync(this.distPath + fileName))
-      }
-    }
-    else {
-      if(fileName === '/login') {
-        let body = ''
-        let result = 'OK'
-        req.on('data', (data) => { body += data })
-        req.on('end', () => {
-          console.log(Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString('utf8'))
-          let credentials = JSON.parse(body)
-          if(credentials.id!=='admin' || credentials.pwd!=='admin'){
-            result = 'KO'
-          }
-          res.statusCode = 200
-          res.end(JSON.stringify(result))
-        })
-        req.on('error', (e) => { console.error(e.message) })
       }
     }
   }

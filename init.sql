@@ -57,3 +57,16 @@ VALUES('18:10',0),('18:20',0),('18:30',0),('18:40',0),('18:50',0),
 ('21:00',0),('21:10',0),('21:20',0),('21:30',0),('21:40',0),('21:50',0),
 ('22:00',0),('22:10',0),('22:20',0),('22:30',0),('22:40',0),('22:50',0),('23:00',0);
 
+delimiter |
+
+CREATE EVENT reset_orders_timeslot
+ON SCHEDULE EVERY 1 DAY
+STARTS '2021-01-20 00:00:00'
+DO
+  BEGIN
+    DELETE FROM OrderPizza;
+    DELETE FROM Orders;
+    UPDATE Orders SET state = 0;
+  END |
+
+delimiter ;

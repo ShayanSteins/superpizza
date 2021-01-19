@@ -6,7 +6,7 @@ class WebSocketServer {
     this.ws = new WebSocket.Server({ server })
     this.database = null
     this.tm = new TimeManager()
-    this.socketList = []    
+    this.socketList = []
     this.init()
   }
 
@@ -34,14 +34,13 @@ class WebSocketServer {
                 let changedSlot = this.tm.setSlotUsed(message.datas)
                 this.database.setTimeSlots(changedSlot)
 
-                // renvoyer la commande à l'admin
-
-
-                // Notification des autres clients pour qu'ils mettent à jour leur slots dispos
+                // Notification des autres clients pour qu'ils mettent à jour leur slots dispos + Admin qui mets à jour sa liste
                 this.socketList.forEach(so => {
-                  if (so != socket)
-                    so.send(JSON.stringify({ "head": "updateSlotsRequired" }))
+                  so.send(JSON.stringify({ "head": "updateSlotsRequired" }))
                 })
+              }
+              else {
+                // DO TO
               }
             })
             break;
@@ -55,6 +54,25 @@ class WebSocketServer {
             socket.send(JSON.stringify({ "head": "updateSlots", "datas": arrSlot }))
             break;
 
+          case 'getOrders':
+            this.database.getOrders().then((res) => {
+              socket.send(JSON.stringify({ "head": "updateOrders", "datas": this.tm.requestOrdToArray(res) }))
+            })
+            break
+
+          case 'setState':
+            this.database.setState(message.datas.idOrder, message.datas.state).then((response) => {
+              if (!response.warningStatus) {
+                this.socketList.forEach(so => {
+                  so.send(JSON.stringify({ "head": "updateState", "datas": { "idOrder": message.datas.idOrder, "state": message.datas.state } }))
+                })
+              }
+              else {
+                //TO DO
+              }
+            })
+            break
+
           default:
             break;
         }
@@ -65,8 +83,6 @@ class WebSocketServer {
       });
     })
   }
-
-
 }
 
 module.exports = WebSocketServer

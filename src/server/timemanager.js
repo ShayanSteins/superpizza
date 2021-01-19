@@ -4,7 +4,7 @@ class TimeManager {
     this.pile = []
   }
 
-  init(datas) {    
+  init(datas) {
     for (const iterator of datas) {
       this.timeslots.set(iterator.hour, iterator.used)
       this.pile.push(iterator.hour)
@@ -14,7 +14,7 @@ class TimeManager {
   /**
    * Mets à jour les slots utilisés par la nouvelle commande
    * @param {Object} order : Objet contenant l'ensemble des informations de la nouvelle commande
-   * @returns {Array} changedSlots : tableau listant les nom des slots modifiés
+   * @returns {Array} : tableau listant les nom des slots modifiés
    */
   setSlotUsed(order) {
     let changedSlots = []
@@ -29,7 +29,7 @@ class TimeManager {
   /**
    * Récupère l'ensemble des horaires de retrait possibles pour une quantité de pizzas donnée
    * @param {Number} qtyPizzas : quantité de pizza pour la commande
-   * @returns {Array} availableSlots: tableau contenant l'ensemble des horaires possibles
+   * @returns {Array} : tableau contenant l'ensemble des horaires possibles
    */
   getAvailableTimeSlots(qtyPizzas = 1) {
     let availableSlots = []
@@ -55,12 +55,32 @@ class TimeManager {
         }
       }
     }
-    return availableSlots
+    return this.checkCurrentHour(availableSlots)
+  }
+
+  /**
+   * Supprime, dans un tableau d'horaire, ceux dont l'heure est déjà passée
+   * @param {Array} arrTS : tableau d'horaire
+   * @returns {Array} : tableau filtré avec les horaires possibles
+   */
+  checkCurrentHour(arrTS) {
+    let newArr = []
+    arrTS.forEach( timeslot => {
+      let hour = new Date().toLocaleTimeString('fr-FR')
+
+      // Si c'est avant 10h, on ajoute le zero avant, afin de pouvoir comparer les horaires en string
+      if(hour.length < 8) hour = '0' + hour.substring(0,4)
+      else hour = hour.substring(0,5)
+
+      if (hour < timeslot) newArr.push(timeslot)
+    })
+    
+    return newArr
   }
 
   /**
  * Retourne tous les slots non occupé (sans commande) de this.timeslots
- * @returns {Array} emptySlots : tableau contenant les horaires diponibles
+ * @returns {Array} : tableau contenant les horaires diponibles
  */
   getEmptySlots() {
     let emptySlots = []
@@ -73,7 +93,7 @@ class TimeManager {
   /**
    * Transforme un Array de résultats SQL en Map (pour les timeslots)
    * @param {Array} dbResult : tableau des résultats d'une requête SQL 
-   * @returns {Map} mapObj : Map de résultats SQL
+   * @returns {Map} : Map de résultats SQL
    */
   arrayDbRequestToMap(dbResult) {
     let mapObj = new Map()
@@ -81,6 +101,40 @@ class TimeManager {
       mapObj.set(iterator.hour, iterator.used)
     }
     return mapObj
+  }
+
+  /**
+   * Formate le résultat de la requête SQL en un tableau (de tableau pour les pizzas)
+   * @param {Array} dbResult : résultat de la requête SQL
+   * @returns {Array} : Tableau formaté pour la mise à jour côté client
+   */
+  requestOrdToArray(dbResult) {
+    let arr = []
+    for (const line of dbResult) {
+      let check = arr.find(el => el.idOrder == line.idOrder)
+      if (check !== undefined) {
+        check.pizzas.push({
+          name: line.name,
+          qty: line.qty
+        })
+      }
+      else {
+        arr.push({
+          idOrder: line.idOrder,
+          lastName: line.lastName,
+          firstName: line.firstName,
+          phone: line.phone,
+          state: line.state,
+          price: line.price,
+          timeSlot: line.timeSlot,
+          pizzas: [{
+            name: line.name,
+            qty: line.qty
+          }]
+        })
+      }
+    }
+    return arr
   }
 }
 

@@ -34,6 +34,10 @@ class Database {
     return this.executeQuery('SELECT * FROM Pizzas')
   }
 
+  getOrders() {
+    return this.executeQuery('SELECT o.idOrder, o.lastName, o.firstName, o.phone, o.state, o.price, o.timeSlot, p.name, op.qty FROM Orders as o, OrderPizza as op, Pizzas as p WHERE p.idPizza = op.idPizza AND o.idOrder = op.idOrder ORDER BY o.timeSlot, o.idOrder')
+  }
+
   getTimeSlotsFromDB() {
     return this.executeQuery('SELECT * FROM TimeSlot')
   }
@@ -48,6 +52,11 @@ class Database {
     return this.executeQuery(updateOrder, hour)
   }
 
+  setState(id, state) {
+    const updateStateOrder = "UPDATE Orders SET state = ? WHERE idOrder = ?"
+    return this.executeQuery(updateStateOrder, [state, id])
+  }
+
   async addOrder(datas) {
     const insertOrder = "INSERT INTO Orders (lastName, firstName, phone, state, price, timeSlot) VALUES(?,?,?,0,?,?)"
     let res = await this.executeQuery(insertOrder, [datas.lastName, datas.firstName, datas.phone, datas.totalPrice, datas.timeSlot])
@@ -59,6 +68,8 @@ class Database {
     }
     return await this.executeQuery(insertOrderPizza, params)
   }
+
+  
 
 
 

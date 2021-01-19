@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import images from '../assets/img/*.jpeg'
+import images from '../../assets/img/*.jpeg'
 
 export default {
   name: 'PizzaDisplayer',

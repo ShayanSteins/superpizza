@@ -11,6 +11,12 @@
       </button>
     </div>
 
+    <div v-if="popinDisplayed" class="center">
+      <span>Merci pour votre commande, elle a été transmise à nos Pizzaïolo de
+      compétition !</span><br>
+      <button @click="closePopin">Ok</button>
+    </div>
+
     <div v-if="order.totalPrice > 0" id="fullCart">
       <form @submit.prevent="checkForm">
         <div id="cart" class="border rounded">
@@ -38,6 +44,7 @@
                 {{ opt }}
               </option>
             </select>
+            <div v-if="timeSlotsAvailable.length == 0" class="error italic small">Veuillez nous excuser, il semble qu'il n'y ai pas de créneau possible pour votre commande. Veuillez tenter avec moins de pizza, ou demain ;)</div>
           </div>
         </div>
 
@@ -93,7 +100,8 @@ export default {
   data() {
     return {
       pizzas: this.order.pizzas,
-      timeSlotsAvailable: []
+      timeSlotsAvailable: [],
+      popinDisplayed: false
     }
   },
   props: {
@@ -112,8 +120,11 @@ export default {
       this.order.totalQty = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, false)
     },
     checkForm(e) {
-      if (this.order.totalPrice > 0)
+      if (this.order.totalPrice > 0) {
         this.$ws.send(JSON.stringify({ "head": "newOrder", "datas": this.$changeObjectMaptoArray(this.order) }))
+        this.popinDisplayed = true
+        this.$emit('reset')
+      }
     },
     getTimeSlots() {
       this.$ws.onopen = () => {
@@ -134,6 +145,9 @@ export default {
             break;
         }
       }
+    },
+    closePopin() {
+      this.popinDisplayed = false
     }
   }
 }
@@ -160,11 +174,15 @@ export default {
   color: var(--main-grey-color);
 }
 
-.center{
+.center {
   text-align: center;
 }
 
-#emptyCart {  
+.error {
+  color: var(--main-red-color);
+}
+
+#emptyCart {
   margin: 4rem 0;
 }
 
@@ -183,7 +201,7 @@ export default {
 
 #selectHour {
   width: 35%;
-  margin-top: 0.5rem;
+  margin: 0.5rem 0rem;
   font-size: 1.2rem;
 }
 

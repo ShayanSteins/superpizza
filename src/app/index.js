@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { Store } from './store.js'
+import { Store } from '../assets/store.js'
 
 Store.initWS()
 

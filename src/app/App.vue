@@ -24,13 +24,14 @@
         id="shoppingCartDiv" 
         :class="{active : isShoppingDisplayed}" 
         :order="order" 
-        @close="closeShoppingCart">
+        @close="closeShoppingCart"
+        @reset="initEmptyOrder">
       </ShoppingCart>
     </div>   
 </template>
 
 <script>
-import shoppingCartIcon from './assets/shopping_cart.svg'
+import shoppingCartIcon from '../assets/img/shopping_cart.svg'
 import PizzaDisplayer from './components/PizzaDisplayer.vue'
 import ShoppingCart from './components/ShoppingCart.vue'
 
@@ -45,15 +46,16 @@ export default {
       loading: false,
       isShoppingDisplayed: false,
       menuPizzas: null,
-      order: {
-        pizzas: new Map([[1,2], [5,3]]),
-        totalPrice: 0.00,
-        totalQty: 0,
-        lastName: '',
-        firstName: '',
-        phone: '',
-        timeSlot: ''
-      }
+      order: {}
+      // {
+      //   pizzas: new Map([[1,2], [5,3]]),
+      //   totalPrice: 0.00,
+      //   totalQty: 0,
+      //   lastName: '',
+      //   firstName: '',
+      //   phone: '',
+      //   timeSlot: ''
+      // }
       // order: {
       //   pizzas: new Map(),
       //   totalPrice: 0.00,
@@ -66,6 +68,7 @@ export default {
   },
   created() {
     this.getMenu()
+    this.initEmptyOrder()
   },
   methods: {
     getMenu() {
@@ -99,6 +102,18 @@ export default {
     },
     getShoppingCart() {
       return shoppingCartIcon
+    },
+    initEmptyOrder() {
+      console.log('eho')
+      this.order = {
+        pizzas: new Map(),
+        totalPrice: 0.00,
+        totalQty: 0,
+        lastName: '',
+        firstName: '',
+        phone: '',
+        timeSlot: ''
+      }
     }
   }
 }

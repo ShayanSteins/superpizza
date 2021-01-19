@@ -1,6 +1,11 @@
 import Vue from 'vue'
-import Login from './Login.vue'
+import Admin from './Admin.vue'
+import { Store } from '../assets/store.js'
+
+Store.initWS()
+
+Vue.use(Store)
 
 new Vue({
-  render: h =>h(Login)
-}).$mount('#login')
+  render: h =>h(Admin)
+}).$mount('#admin')
