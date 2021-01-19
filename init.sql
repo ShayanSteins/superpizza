@@ -61,12 +61,13 @@ delimiter |
 
 CREATE EVENT reset_orders_timeslot
 ON SCHEDULE EVERY 1 DAY
-STARTS '2021-01-20 00:00:00'
+STARTS '2021-01-21 00:00:00'
 DO
   BEGIN
     DELETE FROM OrderPizza;
     DELETE FROM Orders;
     UPDATE Orders SET state = 0;
+    UPDATE TimeSlot SET used = 0;
   END |
 
 delimiter ;

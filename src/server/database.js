@@ -1,12 +1,18 @@
 const mariadb = require('mariadb')
 
+/**
+ * Gestionnaire de base de données
+ * @property {mariadb.Pool} : Pool de connexion à la DB
+ */
 class Database {
-
   constructor(config) {
     this.pool = mariadb.createPool(config)
     this.testConnection()
   }
 
+  /**
+   * Teste la connexion à la DB via une requête simple
+   */
   async testConnection() {
     try {
       await this.pool.query("SELECT version()")
@@ -15,7 +21,11 @@ class Database {
     }
   }
 
-
+  /**
+   * Fonction d'exécution des requêtes
+   * @param {String} query : requête paramétrée à exécuter
+   * @param {Array[Array]|Array|null} params : paramètres à inclure dans la requête
+   */
   async executeQuery(query, params) {
     try {
       if (Array.isArray(params) && Array.isArray(params[0]))
@@ -30,18 +40,31 @@ class Database {
     }
   }
 
+  /**
+   * Retourne l'ensemble des pizzas de la carte
+   */
   getMenu() {
     return this.executeQuery('SELECT * FROM Pizzas')
   }
 
+  /**
+   * Retourne l'ensemble des commandes, avec les pizzas de chacune
+   */
   getOrders() {
     return this.executeQuery('SELECT o.idOrder, o.lastName, o.firstName, o.phone, o.state, o.price, o.timeSlot, p.name, op.qty FROM Orders as o, OrderPizza as op, Pizzas as p WHERE p.idPizza = op.idPizza AND o.idOrder = op.idOrder ORDER BY o.timeSlot, o.idOrder')
   }
 
+  /**
+   * Retourne l'ensemble des TimeSlots 
+   */
   getTimeSlotsFromDB() {
     return this.executeQuery('SELECT * FROM TimeSlot')
   }
 
+  /**
+   * Mets à jour un timeSlot
+   * @param {Array} hour : Tableau des horaires à modifier
+   */
   setTimeSlots(hour) {
     const updateOrder = "UPDATE TimeSlot SET used = 1 WHERE hour = ?"
     if (hour.length > 1) {
@@ -52,11 +75,18 @@ class Database {
     return this.executeQuery(updateOrder, hour)
   }
 
+  /**
+   * Mets à jour le statu d'une commande
+   */
   setState(id, state) {
     const updateStateOrder = "UPDATE Orders SET state = ? WHERE idOrder = ?"
     return this.executeQuery(updateStateOrder, [state, id])
   }
 
+  /**
+   * Ajoute une commande en base de données
+   * @param {Object} datas : objet représentant la commande 
+   */
   async addOrder(datas) {
     const insertOrder = "INSERT INTO Orders (lastName, firstName, phone, state, price, timeSlot) VALUES(?,?,?,0,?,?)"
     let res = await this.executeQuery(insertOrder, [datas.lastName, datas.firstName, datas.phone, datas.totalPrice, datas.timeSlot])
@@ -68,17 +98,6 @@ class Database {
     }
     return await this.executeQuery(insertOrderPizza, params)
   }
-
-  
-
-
-
-  // const getAllPizzas = 'SELECT * FROM Pizzas'
-  // const getAllOrders = 'SELECT o.idOrder, o.timeSlot, p.idPizza, op.qty FROM Orders as o, OrderPizza as op, Pizzas as p WHERE p.idPizza = op.idPizza AND o.idOrder = op.idOrder'
-  // const insertOrder = "INSERT INTO Orders (lastName, firstName, phone, state, price, timeSlot) VALUES('ted','ted','00.00.00.00.00','0',25.00,'19:30')"
-  // const insertOrderPizza = "INSERT INTO OrderPizza (idOrder, idPizza, qty) VALUES(1,1,3),(1,3,1),(1,5,2)"
-  // const reinitOrderPizza = "DELETE FROM OrderPizza"
-  // const reinitOrders = "DELETE FROM Orders"
 }
 
 module.exports = Database

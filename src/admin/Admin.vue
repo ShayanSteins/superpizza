@@ -1,11 +1,11 @@
 <template>
   <div>
     <header class="shadow">
-      <div id="headerTitle" class="bold">Super Pizza</div>
+      <div id="headerTitle" class="bold center">Super Pizza</div>
     </header>
 
     <div id="body">
-      <form @submit.prevent="login" v-if="!isLogged">
+      <form @submit.prevent="login" v-if="!isLogged" class="loginDiv">
         <input type="text" v-model="id" placeholder="Identifiant" required />
         <input type="password" v-model="pwd" placeholder="Password" required />
         <button>Connexion</button>
@@ -13,15 +13,18 @@
       <span>{{ errorMsg }}</span>
 
       <div v-if="isLogged">
-        <span class="title bold">Commandes à traiter</span>
-        <div v-if="orders.length === 0">
-          <span>Pas encore de commande pour ce soir... Veuillez patienter =)</span>
+        <div class="title bold"><span>Commandes à traiter</span></div>
+        <div v-if="orders.length === 0" class="center">
+          <span
+            >Pas encore de commande pour ce soir... Veuillez patienter =)</span
+          >
         </div>
         <OrderDisplayer
           v-for="o in orders"
           :key="o.idOrder"
           :order="o"
           class="orderDisplayer border rounded"
+          :class="{ disable: o.state }"
         ></OrderDisplayer>
       </div>
     </div>
@@ -123,9 +126,11 @@ export default {
 <style>
 :root {
   --main-bg-color: rgb(248, 248, 248);
+  --light-white-color: rgb(222, 222, 222);
   --main-green-color: rgb(0 144 69);
   --main-red-color: rgb(208 44 55);
   --main-grey-color: rgb(41 41 41);
+  --light-grey-color: rgb(64 64 64);
   --shadow-element: 2px 2px 4px rgb(21 21 21 / 78%);
 }
 body {
@@ -142,7 +147,6 @@ header {
 }
 #headerTitle {
   font-family: fantasy;
-  text-align: center;
 }
 
 .italic {
@@ -159,13 +163,54 @@ header {
 }
 .title {
   font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+.center {
+  text-align: center;
 }
 
 #body {
   padding: 0.5rem;
 }
+
+.loginDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+.loginDiv > input {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+button {
+  font-size: 1.2rem;
+  border: none;
+  background-color: var(--main-green-color);
+  margin-top: 1rem;
+  padding: 0.3rem 0.5rem;
+}
+button:hover {
+  filter: brightness(1.2);
+  cursor: pointer;
+  color: var(--light-white-color);
+}
+
 .orderDisplayer {
   margin-top: 0.5rem;
   padding: 0.2rem 0.5rem;
+  border: 2px solid var(--main-red-color);
+}
+.disable {
+  border: 2px solid var(--light-grey-color);
+  background-color: var(--light-white-color);
+  filter: opacity(0.5);
+}
+
+@media screen and (min-width: 600px) {
+  .orderDisplayer {
+    width: 60%;
+  }
 }
 </style>

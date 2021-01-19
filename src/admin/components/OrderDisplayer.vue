@@ -5,9 +5,9 @@
         <input type="checkbox" v-model="order.state" @change="setState" />
         <span class="bold">{{ order.timeSlot }}</span>
       </div>
-      <div>
-        <span>{{ order.firstName }}</span>
-        <span>{{ order.lastName }}</span
+      <div class="right">
+        <span class="bold">{{ order.firstName }}</span>
+        <span class="bold">{{ order.lastName }}</span
         ><br />
         <span class="italic">{{ order.phone }}</span>
       </div>
@@ -40,5 +40,8 @@ export default {
 #header {
   display: flex;
   justify-content: space-between;
+}
+.right {
+  text-align: right;
 }
 </style>

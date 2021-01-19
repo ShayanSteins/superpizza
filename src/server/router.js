@@ -1,6 +1,8 @@
 const fs = require('fs')
 const { compare } = require('./utils.js')
 
+
+// Types MIME
 const mimeType = {
   css: 'text/css',
   js: 'application/javascript',
@@ -12,16 +14,29 @@ const mimeType = {
   ico: 'image/x-icon'
 }
 
+/**
+ * Routeur web
+ * @property {String} distPath : chemin d'accès au dossier dist (parcel)
+ */
 class Router {
   constructor(config) {
     this.distPath = config.distPath
     this.database = null
   }
 
+  /**
+   * Enregistrement du gestionnaire de base de données
+   * @param {Database} Database : gestionnaire de base de données
+   */
   registerDataBase(Database) {
     this.database = Database
   }
 
+  /**
+   * Gestionnaire de route et requête HTTP
+   * @param {Request} req : requête à router
+   * @param {Response} res : réponse reçue
+   */
   async handle(req, res) {
     let fileName = req.url === '/' ? 'app/index.html' : req.url
     const extension = fileName.split('.')[fileName.split('.').length - 1]
