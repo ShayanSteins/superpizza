@@ -47,23 +47,6 @@ export default {
       isShoppingDisplayed: false,
       menuPizzas: null,
       order: {}
-      // {
-      //   pizzas: new Map([[1,2], [5,3]]),
-      //   totalPrice: 0.00,
-      //   totalQty: 0,
-      //   lastName: '',
-      //   firstName: '',
-      //   phone: '',
-      //   timeSlot: ''
-      // }
-      // order: {
-      //   pizzas: new Map(),
-      //   totalPrice: 0.00,
-      //   lastName: 'ted',
-      //   firstName: 'ted',
-      //   phone: '00.00.00.00.00',
-      //   timeSlot: '18:10'
-      // }
     }
   },
   created() {
@@ -91,8 +74,8 @@ export default {
       this.$ws.send(JSON.stringify({ "head": "getTimeSlots", "datas": this.order.totalQty }))
     },
     calculateTotals() {
-      this.order.totalPrice = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, true)
-      this.order.totalQty = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, false)
+      this.order.totalPrice = this.$countTotalOfMap(this.order.pizzas, true)
+      this.order.totalQty = this.$countTotalOfMap(this.order.pizzas, false)
     },
     openShoppingCart() {
       this.isShoppingDisplayed = true
@@ -104,7 +87,6 @@ export default {
       return shoppingCartIcon
     },
     initEmptyOrder() {
-      console.log('eho')
       this.order = {
         pizzas: new Map(),
         totalPrice: 0.00,

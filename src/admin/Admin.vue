@@ -15,9 +15,7 @@
       <div v-if="isLogged">
         <div class="title bold"><span>Commandes à traiter</span></div>
         <div v-if="orders.length === 0" class="center">
-          <span
-            >Pas encore de commande pour ce soir... Veuillez patienter =)</span
-          >
+          <span>Pas encore de commande pour ce soir... Veuillez patienter =)</span>
         </div>
         <OrderDisplayer
           v-for="o in orders"
@@ -49,9 +47,8 @@ export default {
     }
   },
   created() {
-    if (localStorage.getItem('logged') !== null) {
+    if (localStorage.getItem('logged') !== null)
       this.isLogged = localStorage.getItem('logged')
-    }
 
     this.$ws.onopen = () => {
       this.$ws.send(JSON.stringify({ "head": "getOrders" }))
@@ -71,7 +68,8 @@ export default {
         case 'updateState':
           try {
             let odr = this.orders.find(o => o.idOrder == response.datas.idOrder)
-            odr.state = response.datas.state
+            if (odr !== undefined)
+              odr.state = response.datas.state
           } catch (error) {
             throw error
           }

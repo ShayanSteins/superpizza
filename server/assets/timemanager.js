@@ -1,9 +1,18 @@
+/**
+ * Gestionnaire des timeSlots
+ * @property {Map} timeslots : Map représentant le couple [horaire : disponibilité]
+ * @property {Array} pile : Tableau contenant l'ensemble des horaires de retrait pour une journée de travail
+ */
 class TimeManager {
   constructor() {
     this.timeslots = new Map()
     this.pile = []
   }
 
+  /**
+   * Initialisation des propriétés de la classe
+   * @param {Array} datas : tableau d'objet { horaire, disponibilité }
+   */
   init(datas) {
     for (const iterator of datas) {
       this.timeslots.set(iterator.hour, iterator.used)
@@ -36,7 +45,6 @@ class TimeManager {
     if (this.getEmptySlots().length >= qtyPizzas) { // Si il y au moins autant de slots disponibles que de pizzas en commande
 
       for (let i = 0; i < this.pile.length; i++) {
-
         if (i + qtyPizzas <= this.pile.length) { // Si il y a suffisamment de slot suivant (si l'on est pas à la fin de la pile)
           let isEnoughSpace = true
           let studySlot = []
@@ -49,9 +57,8 @@ class TimeManager {
             studySlot.push(this.pile[y])
           }
 
-          if (isEnoughSpace) { // Si on a trouvé assez d'espace
+          if (isEnoughSpace) // Si on a trouvé assez d'espace
             availableSlots.push(studySlot[studySlot.length - 1]) // On ajoute le dernier slot, correspondant à l'horaire de retrait possible de la commande
-          }
         }
       }
     }
@@ -65,16 +72,17 @@ class TimeManager {
    */
   checkCurrentHour(arrTS) {
     let newArr = []
-    arrTS.forEach( timeslot => {
-      let hour = new Date().toLocaleTimeString('fr-FR')
+    arrTS.forEach(timeslot => {
+      let hour = new Date().getUTCHours() + 1 + ':' + new Date().getUTCMinutes()
+      if (hour.length < 8)
+        hour = '0' + hour.substring(0, 4) // Si c'est avant 10h, on ajoute le zero avant, afin de pouvoir comparer les horaires en string
+      else
+        hour = hour.substring(0, 5)
 
-      // Si c'est avant 10h, on ajoute le zero avant, afin de pouvoir comparer les horaires en string
-      if(hour.length < 8) hour = '0' + hour.substring(0,4)
-      else hour = hour.substring(0,5)
-
-      if (hour < timeslot) newArr.push(timeslot)
+      if (hour < timeslot)
+        newArr.push(timeslot)
     })
-    
+
     return newArr
   }
 
@@ -85,7 +93,8 @@ class TimeManager {
   getEmptySlots() {
     let emptySlots = []
     for (const [time, available] of this.timeslots) {
-      if (!available) emptySlots.push(time)
+      if (!available)
+        emptySlots.push(time)
     }
     return emptySlots
   }

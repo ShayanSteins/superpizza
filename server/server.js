@@ -51,8 +51,8 @@ class Server {
    * @param {Object} config : Objet contenant les paramètres de configuration serveur
    */
   start(config) {
-    this.server.listen(config.port, () => {
-      console.log(`Server running at port ${config.port}`)
+    this.server.listen(process.env.PORT, () => {
+      console.log(`Server running at port ${process.env.PORT}`)
     })
     return this
   }

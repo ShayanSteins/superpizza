@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { compare } = require('./utils.js')
+const { compare } = require('./assets/utils.js')
 
 
 // Types MIME
@@ -41,7 +41,6 @@ class Router {
     let fileName = req.url === '/' ? 'app/index.html' : req.url
     const extension = fileName.split('.')[fileName.split('.').length - 1]
     const method = req.method
-    // console.log(`Nouvelle requete ${method} pour ${fileName}`)
 
     if (method === 'GET') {
       if (fileName === '/initCli') {
@@ -61,8 +60,7 @@ class Router {
       else if (fileName === '/login') {
         try {
           let credentials = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString('utf8')
-          let [username, pwd] = credentials.split(':')
-  
+          let [username, pwd] = credentials.split(':')  
           let match = await compare(pwd, username)
           if (match) {
             res.statusCode = 200

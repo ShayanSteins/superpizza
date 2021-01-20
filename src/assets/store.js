@@ -1,39 +1,52 @@
 export let Store = {
   menuPizzas: null,
   ws: null
-
 }
 
+/**
+ * Initialisation du WebSocket
+ */
 Store.initWS = function () {
   Store.ws = new WebSocket('ws://' + document.location.host)
 }
 
+/**
+ * Enregistrement du Plugin et de ses méthodes
+ * @param {Vue} Vue : instance de Vue 
+ * @param {Array} options 
+ */
 Store.install = function (Vue, options) {
   Vue.prototype.$ws = Store.ws
 
+  /**
+   * Mise à jour du menu des pizas
+   * @param {Array} menu 
+   */
   Vue.prototype.$menuPizzasSave = function (menu) {
     Store.menuPizzas = menu
   }
-  Vue.prototype.$getPizzaPrice = function (idPizza) {
+
+  /**
+   * Récupère la valeur d'un attribut d'une pizza donnée
+   * @param {Number} idPizza : identifiant de la pizza
+   * @param {String} something : nom de l'attribut désirée (ex : price, name, ...)
+   */
+  Vue.prototype.$getPizzaInfos = function (idPizza, something) {
     if (Store.menuPizzas !== null) {
       const pizz = Store.menuPizzas.find(p => p.idPizza === idPizza)
       if (pizz !== undefined)
-        return pizz.price
-    }
-    return 0
-  }
-  Vue.prototype.$getPizzaName = function (idPizza) {
-    if (Store.menuPizzas !== null) {
-      const pizz = Store.menuPizzas.find(p => p.idPizza === idPizza)
-      if (pizz !== undefined)
-        return pizz.name
+        return pizz[something]
     }
     return 0
   }
 
+  /**
+   * Formate les Map contenu dans un Objet en Array
+   * @param {Object} inObject : contenant une ou plusieurs Map
+   * @returns {Object} contenant un ou plusieurs Array
+   */
   Vue.prototype.$changeObjectMaptoArray = function (inObject) {
     let outObject, value, key
-
     outObject = {}
 
     for (key in inObject) {
@@ -46,14 +59,19 @@ Store.install = function (Vue, options) {
     return outObject
   }
 
-  Vue.prototype.$countTotalOfMap = function (actualTotal, mapObj, price) {
-    actualTotal = 0
+  /**
+   * Calcule la quantité ou le prix total d'une commande
+   * @param {Map} mapObj : Map de l'ensemble des pizzas pour une commande
+   * @param {Boolean} price : True, pour obtenir le prix total, false pour obtenir la quantité totale
+   */
+  Vue.prototype.$countTotalOfMap = function (mapObj, price) {
+    let total = 0
     for (const [id, qty] of mapObj) {
       if (price)
-        actualTotal = Number(actualTotal) + Number(qty) * Number(Vue.prototype.$getPizzaPrice(id))
+        total = Number(total) + Number(qty) * Number(Vue.prototype.$getPizzaPrice(id))
       else
-        actualTotal = Number(actualTotal) + Number(qty)
+        total = Number(total) + Number(qty)
     }
-    return actualTotal
+    return total
   }
 }

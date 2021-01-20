@@ -1,6 +1,6 @@
 <template>
   <div class="lineCart">
-    <span class="name">{{ this.$getPizzaName(this.line.id) }}</span>
+    <span class="name">{{ this.$getPizzaInfos(this.line.id, 'name') }}</span>
     <input
       type="number"
       class="qty"

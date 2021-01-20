@@ -24,7 +24,7 @@
             v-for="[idPizza, qty] of pizzas"
             :line="{ id: idPizza, qty: qty }"
             :key="idPizza"
-            :unitPrice="$getPizzaPrice(idPizza)"
+            :unitPrice="$getPizzaInfos(idPizza, 'price')"
             @change="updateOrderQty"
           ></LineCart>
           <div id="cartTotal" class="bold">
@@ -116,8 +116,8 @@ export default {
       this.$ws.send(JSON.stringify({ "head": "getTimeSlots", "datas": this.order.totalQty }))
     },
     updateTotalOrderPrice() {
-      this.order.totalPrice = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, true)
-      this.order.totalQty = this.$countTotalOfMap(this.order.totalPrice, this.order.pizzas, false)
+      this.order.totalPrice = this.$countTotalOfMap(this.order.pizzas, true)
+      this.order.totalQty = this.$countTotalOfMap(this.order.pizzas, false)
     },
     checkForm(e) {
       if (this.order.totalPrice > 0) {

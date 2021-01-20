@@ -1,10 +1,5 @@
-DROP DATABASE superpizza;
+DROP DATABASE IF EXISTS superpizza;
 CREATE DATABASE IF NOT EXISTS superpizza;
-
-CREATE USER IF NOT EXISTS admin@localhost IDENTIFIED BY 'admin';
-
-GRANT ALL ON superpizza.* TO admin@localhost;
-FLUSH privileges;
 
 use superpizza;
 
@@ -61,7 +56,7 @@ delimiter |
 
 CREATE EVENT reset_orders_timeslot
 ON SCHEDULE EVERY 1 DAY
-STARTS '2021-01-21 00:00:00'
+STARTS '2021-01-22 00:00:00'
 DO
   BEGIN
     DELETE FROM OrderPizza;

@@ -2,7 +2,7 @@
   <div>
     <div id="header">
       <div>
-        <input type="checkbox" v-model="order.state" @change="setState" />
+        <input type="checkbox" v-model="order.state" @change="setState" title="Terminée"/>
         <span class="bold">{{ order.timeSlot }}</span>
       </div>
       <div class="right">

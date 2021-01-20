@@ -17,7 +17,8 @@
     "dev": "parcel src/app/index.html",
     "watch": "parcel watch src/app/index.html --out-dir dist/app --public-url app",
     "watch2": "parcel watch src/admin/admin.html --out-dir dist/admin --public-url admin",
-    "build": "parcel build src/app/index.html --out-dir dist/app --public-url app && parcel build src/admin/admin.html --out-dir dist/admin --public-url admin"
+    "build": "parcel build src/app/index.html --out-dir dist/app --public-url app && parcel build src/admin/admin.html --out-dir dist/admin --public-url admin",
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
