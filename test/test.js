@@ -1,27 +1,10 @@
-const assert = require('assert').strict
-const TimeManager = require('../src/server/timemanager.js')
+const Runner = require('./runner.js')
+const TimeManagerTest = require('./server/assets/timemanager_test.js')
 
-let right = 0
-let error = 0
 
-const tmTest = new TimeManager()
+let tm = new TimeManagerTest()
+const datas = [{ hour: '12:00', used: 0 }, { hour: '12:10', used: 0 }]
+tm.init(datas)
 
-run('ok', (tmTest instanceof TimeManager))
-run('ok', (tmTest.timeslots instanceof Map))
-run('equal', tmTest.timeslots.size, 0)
-run('ok', Array.isArray(tmTest.pile))
-run('equal', tmTest.pile.length, 0)
-
-console.log('Test OK : ' + right)
-console.log('Test KO : ' + error)
-
-function run(type, content, optionnal) {
-  const test = assert[type]
-  try {
-    test(content, optionnal)
-    right++
-  } catch (err) {
-    console.log(err)
-    error++
-  }
-}
+console.log('Test OK : ' + Runner.right)
+console.log('Test KO : ' + Runner.error)

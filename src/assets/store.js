@@ -7,7 +7,8 @@ export let Store = {
  * Initialisation du WebSocket
  */
 Store.initWS = function () {
-  Store.ws = new WebSocket('ws://' + document.location.host)
+  let proto = (document.location.protocol === "https:") ? "wss://" : "ws//"
+  Store.ws = new WebSocket(proto + document.location.host)
 }
 
 /**
@@ -68,7 +69,7 @@ Store.install = function (Vue, options) {
     let total = 0
     for (const [id, qty] of mapObj) {
       if (price)
-        total = Number(total) + Number(qty) * Number(Vue.prototype.$getPizzaPrice(id))
+        total = Number(total) + Number(qty) * Number(Vue.prototype.$getPizzaInfos(id, 'price'))
       else
         total = Number(total) + Number(qty)
     }

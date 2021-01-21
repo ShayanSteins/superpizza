@@ -109,6 +109,14 @@ export default {
       type: Object
     }
   },
+  watch: {
+    order: {
+      deep: true,
+      handler(order) {
+        this.pizzas = order.pizzas
+      }
+    }
+  },
   methods: {
     updateOrderQty(idPizz, qty) {
       this.order.pizzas.set(idPizz, qty)

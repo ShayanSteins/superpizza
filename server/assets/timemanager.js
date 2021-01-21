@@ -73,16 +73,13 @@ class TimeManager {
   checkCurrentHour(arrTS) {
     let newArr = []
     arrTS.forEach(timeslot => {
-      let hour = new Date().getUTCHours() + 1 + ':' + new Date().getUTCMinutes()
-      if (hour.length < 8)
-        hour = '0' + hour.substring(0, 4) // Si c'est avant 10h, on ajoute le zero avant, afin de pouvoir comparer les horaires en string
-      else
-        hour = hour.substring(0, 5)
+      let hour = new Date().getUTCHours().toString().length < 2 ? '0' + new Date().getUTCHours() + 1 : new Date().getUTCHours() + 1
+      let minutes = new Date().getUTCMinutes().toString().length < 2 ? '0' + new Date().getUTCMinutes() : new Date().getUTCMinutes()
+      let time = `${hour}:${minutes}`
 
-      if (hour < timeslot)
+      if (time < timeslot)
         newArr.push(timeslot)
     })
-
     return newArr
   }
 
