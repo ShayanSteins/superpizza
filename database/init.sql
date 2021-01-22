@@ -61,7 +61,6 @@ DO
   BEGIN
     DELETE FROM OrderPizza;
     DELETE FROM Orders;
-    UPDATE Orders SET state = 0;
     UPDATE TimeSlot SET used = 0;
   END |
 

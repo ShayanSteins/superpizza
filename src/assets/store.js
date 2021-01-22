@@ -7,7 +7,7 @@ export let Store = {
  * Initialisation du WebSocket
  */
 Store.initWS = function () {
-  let proto = (document.location.protocol === "https:") ? "wss://" : "ws//"
+  let proto = (document.location.protocol === "https:") ? "wss://" : "ws://"
   Store.ws = new WebSocket(proto + document.location.host)
 }
 

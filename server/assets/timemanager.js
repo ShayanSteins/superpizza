@@ -73,7 +73,7 @@ class TimeManager {
   checkCurrentHour(arrTS) {
     let newArr = []
     arrTS.forEach(timeslot => {
-      let hour = new Date().getUTCHours().toString().length < 2 ? '0' + new Date().getUTCHours() + 1 : new Date().getUTCHours() + 1
+      let hour = new Date().getUTCHours().toString().length < 2 ? '0' + (new Date().getUTCHours() + 1) : new Date().getUTCHours() + 1
       let minutes = new Date().getUTCMinutes().toString().length < 2 ? '0' + new Date().getUTCMinutes() : new Date().getUTCMinutes()
       let time = `${hour}:${minutes}`
 
@@ -94,19 +94,6 @@ class TimeManager {
         emptySlots.push(time)
     }
     return emptySlots
-  }
-
-  /**
-   * Transforme un Array de résultats SQL en Map (pour les timeslots)
-   * @param {Array} dbResult : tableau des résultats d'une requête SQL 
-   * @returns {Map} : Map de résultats SQL
-   */
-  arrayDbRequestToMap(dbResult) {
-    let mapObj = new Map()
-    for (const iterator of dbResult) {
-      mapObj.set(iterator.hour, iterator.used)
-    }
-    return mapObj
   }
 
   /**
