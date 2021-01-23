@@ -6,8 +6,12 @@ const mariadb = require('mariadb')
  */
 class Database {
   constructor(config) {
-    this.pool = mariadb.createPool(config)
-    this.testConnection()
+    try {
+      this.pool = mariadb.createPool(config)
+      this.testConnection()
+    } catch (error) {
+      throw error
+    }
   }
 
   /**
@@ -76,7 +80,7 @@ class Database {
   }
 
   /**
-   * Mets à jour le statu d'une commande
+   * Mets à jour le statut d'une commande
    */
   setState(id, state) {
     const updateStateOrder = "UPDATE Orders SET state = ? WHERE idOrder = ?"

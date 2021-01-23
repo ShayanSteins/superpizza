@@ -18,6 +18,15 @@ class Server {
   }
 
   /**
+   * Enregistrement du gestionnaire de base de données
+   * @param {Database} DataBase : gestionnaire de base de données
+   */
+  registerDataBase(DataBase) {
+    this.database = DataBase
+    return this
+  }
+  
+  /**
    * Enregistrement du routeur web
    * @param {Router} Router : routeur web
    */
@@ -38,23 +47,12 @@ class Server {
   }
 
   /**
-   * Enregistrement du gestionnaire de base de données
-   * @param {Database} DataBase : gestionnaire de base de données
-   */
-  registerDataBase(DataBase) {
-    this.database = DataBase
-    return this
-  }
-
-  /**
    * Lancement du serveur web
    * @param {Object} config : Objet contenant les paramètres de configuration serveur
    */
   start(config) {
-    if(process.env.PORT === undefined)
-      process.env.PORT = config.port
-    this.server.listen(process.env.PORT, () => {
-      console.log(`Server running at port ${process.env.PORT}`)
+    this.server.listen(process.env.PORT || config.port, () => {
+      console.log(`Server running at port ${port}`)
     })
     return this
   }

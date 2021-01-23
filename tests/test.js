@@ -1,21 +1,23 @@
 const fs = require('fs')
 const path = require('path')
-const dirTest = './test/server/'
+const dirTest = './tests/server/'
 const Runner = require('./runner.js')
 
 
 
 let filesName = getAllFiles(dirTest)
 
-for (const file of filesName) {
-  execFunctions(file)
+runAll()
+
+async function runAll() {
+  for (const file of filesName) {
+    await execFunctions(file)
+  }
+  
+  console.log('Total test passés : ' + (Runner.right + Runner.error))
+  console.log('Test OK : ' + Runner.right)
+  console.log('Test KO : ' + Runner.error)
 }
-
-console.log('Total test passés : ' + (Runner.right + Runner.error))
-console.log('Test OK : ' + Runner.right)
-console.log('Test KO : ' + Runner.error)
-
-
 
 function getAllFiles(dir) {
   let allFiles = []
@@ -30,14 +32,14 @@ function getAllFiles(dir) {
   return allFiles
 }
 
-function execFunctions(file) {
+async function execFunctions(file) {
   const obj = require(path.resolve(file))
   const methods = Object.getOwnPropertyNames(obj).filter(name => name.match(/Test$/) !== null)
 
   if (typeof obj.tearsUp === 'function') obj.tearsUp()
   for (const method of methods) {
     console.log(`Exécution de ${obj.name} pour ${method}`)
-    obj[method]()
+    await obj[method]()
   }
   if (typeof obj.tearsDown === 'function') obj.tearsDown()
 }

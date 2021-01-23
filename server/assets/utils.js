@@ -41,5 +41,6 @@ let compare = (password, username) => {
 }
 
 module.exports = {
+  hasher,
   compare
 }

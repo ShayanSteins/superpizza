@@ -23,7 +23,7 @@ class WebSocketServer {
    */
   registerDataBase(Database) {
     this.database = Database
-    this.database.getTimeSlotsFromDB().then((response) => {
+    return this.database.getTimeSlotsFromDB().then((response) => {
       this.timeManager.init(response)
     })
   }
@@ -54,7 +54,7 @@ class WebSocketServer {
   route(socket, message) {
     switch (message.head) {
       case 'newOrder':
-        this.database.addOrder(message.datas).then((response) => {
+        return this.database.addOrder(message.datas).then((response) => {
           if (!response.warningStatus) {
             let changedSlot = this.timeManager.setSlotUsed(message.datas)
             this.database.setTimeSlots(changedSlot)
@@ -66,38 +66,38 @@ class WebSocketServer {
             console.error(`Erreur lors de l'enregistrement de la commande en base de données.`)
           }
         })
-        break;
 
       case 'getTimeSlots':
-        let arrSlot
-        if (message.datas)
-          arrSlot = this.timeManager.getAvailableTimeSlots(message.datas)
-        else
-          arrSlot = this.timeManager.getAvailableTimeSlots()
-        socket.send(JSON.stringify({ "head": "updateSlots", "datas": arrSlot }))
-        break;
+        return new Promise(resolve => {
+          let arrSlot
+          if (message.datas)
+            arrSlot = this.timeManager.getAvailableTimeSlots(message.datas)
+          else
+            arrSlot = this.timeManager.getAvailableTimeSlots()
+          socket.send(JSON.stringify({ "head": "updateSlots", "datas": arrSlot }))
+          resolve()
+        })
 
       case 'getOrders':
-        this.database.getOrders().then((response) => {
+        return this.database.getOrders().then((response) => {
           socket.send(JSON.stringify({ "head": "updateOrders", "datas": this.timeManager.requestOrdToArray(response) }))
         })
-        break
 
       case 'setState':
-        this.database.setState(message.datas.idOrder, message.datas.state).then((response) => {
+        return this.database.setState(message.datas.idOrder, message.datas.state).then((response) => {
           if (!response.warningStatus) {
             this.socketList.forEach(so => {
               so.send(JSON.stringify({ "head": "updateState", "datas": { "idOrder": message.datas.idOrder, "state": message.datas.state } }))
             })
           }
           else {
-            console.error(`Erreur lors de la mise à jour (en base) de l'état de la commande.`)
+            console.error(`Erreur lors de la mise à jour en base de données de l'état de la commande.`)
           }
         })
-        break
 
       default:
-        break;
+        console.error('Cas non traité.')
+        break
     }
   }
 }

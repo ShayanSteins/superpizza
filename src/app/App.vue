@@ -5,29 +5,44 @@
     </header>
 
     <div id="body">
-      <div class="loading" v-if="loading">
-        Chargement...
-      </div>
+      <div class="loading" v-if="loading">Chargement...</div>
 
-      <div id="content" :class="{active : !isShoppingDisplayed}" >
+      <div id="content" :class="{ active: !isShoppingDisplayed }">
         <div id="cartIcon">
-          <span class="italic small">Notre plateforme vous propose des pizzas de choix à emporter uniquement. Le paiement se fera lors du retrait de la commande.</span>
-          <img :src="getShoppingCart()" class="buttonImg shadow rounded border" title="Panier" @click="openShoppingCart"> 
+          <span class="italic small"
+            >Notre plateforme vous propose des pizzas de choix à emporter
+            uniquement. Le paiement se fera lors du retrait de la
+            commande.</span
+          >
+          <img
+            :src="getShoppingCart()"
+            class="buttonImg shadow rounded border"
+            title="Panier"
+            @click="openShoppingCart"
+          />
         </div>
 
         <div id="menu" v-if="menuPizzas">
-          <PizzaDisplayer v-for="pizza in menuPizzas" :pizza="pizza" :key="pizza.idPizza" @add-pizza="addPizza"></PizzaDisplayer>
+          <PizzaDisplayer
+            v-for="pizza in menuPizzas"
+            :pizza="pizza"
+            :key="pizza.idPizza"
+            @add-pizza="addPizza"
+          ></PizzaDisplayer>
         </div>
       </div>
 
-      <ShoppingCart 
-        id="shoppingCartDiv" 
-        :class="{active : isShoppingDisplayed}" 
-        :order="order" 
+      <ShoppingCart
+        id="shoppingCartDiv"
+        :class="{ active: isShoppingDisplayed }"
+        :order="order"
         @close="closeShoppingCart"
-        @reset="initEmptyOrder">
+        @reset="initEmptyOrder"
+      >
       </ShoppingCart>
-    </div>   
+    </div>
+    <footer class="center">Pizza(s) ajoutée(s)</footer>
+  </div>
 </template>
 
 <script>
@@ -72,6 +87,12 @@ export default {
       this.order.pizzas.set(idPizz, qty)
       this.calculateTotals()
       this.$ws.send(JSON.stringify({ "head": "getTimeSlots", "datas": this.order.totalQty }))
+      this.cssTransition()
+    },
+    cssTransition() {
+      let addingMessage = document.querySelector('footer')
+      addingMessage.classList.add('move')
+      setTimeout(() => addingMessage.classList.remove('move'), 2000)
     },
     calculateTotals() {
       this.order.totalPrice = this.$countTotalOfMap(this.order.pizzas, true)
@@ -127,7 +148,23 @@ header {
   font-family: fantasy;
   text-align: center;
 }
-
+footer {
+  position: fixed;
+  width: 100%;
+  height: 50px;
+  left: 0;
+  bottom: calc(-50px - 0.6rem);
+  background-color: var(--main-red-color);
+  color: var(--main-bg-color);
+  transition-property: bottom;
+  transition-duration: 0.5s, 1s;
+  -webkit-transition-property: bottom;
+  -webkit-transition-duration: 0.5s, 1s;
+  padding: 0.3rem 0.5rem;
+}
+footer.move {
+  bottom: 0px !important;
+}
 button {
   border: none;
   background-color: var(--main-green-color);
@@ -150,6 +187,9 @@ button {
 }
 .border {
   border: 1px solid var(--main-grey-color);
+}
+.center {
+  text-align: center;
 }
 
 #shoppingCartDiv {

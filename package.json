@@ -14,6 +14,7 @@
     "vue-template-compiler": "^2.6.12"
   },
   "scripts": {
+    "test": "silent=1 node tests/test.js",
     "dev": "parcel src/app/index.html",
     "watch": "parcel watch src/app/index.html --out-dir dist/app --public-url app",
     "watch2": "parcel watch src/admin/admin.html --out-dir dist/admin --public-url admin",

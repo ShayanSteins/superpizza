@@ -39,52 +39,42 @@ class Router {
    */
   async handle(req, res) {
     let fileName = req.url === '/' ? 'app/index.html' : req.url
+    fileName = fileName === '/admin' ? 'admin/admin.html' : fileName
     const extension = fileName.split('.')[fileName.split('.').length - 1]
-    const method = req.method
 
-    if (method === 'GET') {
-      if (fileName === '/initCli') {
-        res.statusCode = 200
-        this.database.getMenu().then((result) => {
-          res.end(JSON.stringify(result))
-        }).catch((err) => {
-          throw err
-        })
-      }
-      else if (fileName === '/admin') {
-        fileName = 'admin/admin.html'
-        res.statusCode = 200
-        res.setHeader('Content-Type', mimeType['html'])
-        res.end(fs.readFileSync(this.distPath + fileName))
-      }
-      else if (fileName === '/login') {
-        try {
-          let credentials = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString('utf8')
-          let [username, pwd] = credentials.split(':')  
-          let match = await compare(pwd, username)
-          if (match) {
-            res.statusCode = 200
-            res.end(JSON.stringify('OK'))
-          }
-          else {
-            res.statusCode = 400
-            res.end(JSON.stringify(`Erreur lors de l'authentification. Merci de saisir à nouveau vos identifiants.`))
-          }
-          
-        } catch (error) {
-          throw error
+    if (fileName === '/initCli') {
+      res.statusCode = 200
+      this.database.getMenu().then((result) => {
+        res.end(JSON.stringify(result))
+      }).catch((err) => {
+        throw err
+      })
+    }
+    else if (fileName === '/login') {
+      try {
+        let credentials = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString('utf8')
+        let [username, pwd] = credentials.split(':')
+        let match = await compare(pwd, username)
+        if (match) {
+          res.statusCode = 200
+          res.end(JSON.stringify('OK'))
         }
+        else {
+          res.statusCode = 400
+          res.end(JSON.stringify('Erreur lors de l\'authentification. Merci de saisir à nouveau vos identifiants.'))
+        }
+
+      } catch (error) {
+        throw error
       }
-      else if (!fs.existsSync(this.distPath + fileName)) {
-        res.statusCode = 404
-        res.setHeader('Content-Type', 'text/html')
-        res.end(`Error 404 : File "${this.distPath + fileName}" not found... (T_T)`)
-      }
-      else {
-        res.statusCode = 200
-        res.setHeader('Content-Type', mimeType[extension])
-        res.end(fs.readFileSync(this.distPath + fileName))
-      }
+    }
+    else if (!fs.existsSync(this.distPath + fileName)) {
+      res.writeHead(404, { 'Content-Type': 'text/html' })
+      res.end(`<html><body style="display: flex;background-color:  rgb(248, 248, 248);color: rgb(208 44 55);justify-content: center;align-items: center;"><h2>Error 404 : File "${this.distPath + fileName}" not found... (&deg;o&deg;)!</h2></body></html>`)
+    }
+    else {
+      res.writeHead(200, { 'Content-Type': mimeType[extension] })
+      res.end(fs.readFileSync(this.distPath + fileName))
     }
   }
 }

@@ -12,7 +12,7 @@
     </div>
 
     <div v-if="popinDisplayed" class="center">
-      <span>Merci pour votre commande, elle a été transmise à nos Pizzaïolo de
+      <span>Merci pour votre commande, elle a été transmise à nos Pizzaïolos de
       compétition !</span><br>
       <button @click="closePopin">Ok</button>
     </div>
@@ -38,7 +38,7 @@
         <div>
           <span>Veuillez choisir l'heure de retrait : </span>
           <div class="center">
-            <select v-model="order.timeSlot" id="selectHour">
+            <select v-model="order.timeSlot" id="selectHour" required>
               <option disabled value="">...</option>
               <option v-for="opt in timeSlotsAvailable" :key="opt" :value="opt">
                 {{ opt }}
@@ -72,7 +72,7 @@
             type="text"
             v-model="order.phone"
             pattern="[0-9]{2}.[0-9]{2}.[0-9]{2}.[0-9]{2}.[0-9]{2}"
-            placeholder="00.00.00.00.00"
+            placeholder="Téléphone : 00.00.00.00.00"
             required
           />
         </div>
@@ -180,10 +180,6 @@ export default {
 }
 #closeShoppingCart:hover {
   color: var(--main-grey-color);
-}
-
-.center {
-  text-align: center;
 }
 
 .error {
