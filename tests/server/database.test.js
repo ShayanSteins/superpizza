@@ -79,13 +79,13 @@ class DatabaseTest {
     })
   }
 
-  // Tests d'intégration : non traité dans le cadre des TU
-  static getMenuTest () { }
-  static getOrdersTest () { }
-  static getTimeSlotsFromDBTest () { }
-  static setStateTest () { }
-  static getCredentialsTest () { }
-  static setCredentialsTest () { }
+  // Fonctions nécessitant des tests d'intégration : non traité dans le cadre des TU
+  // static getMenuTest () { }
+  // static getOrdersTest () { }
+  // static getTimeSlotsFromDBTest () { }
+  // static setStateTest () { }
+  // static getCredentialsTest () { }
+  // static setCredentialsTest () { }
 }
 
 module.exports = DatabaseTest

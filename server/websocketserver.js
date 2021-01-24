@@ -42,7 +42,7 @@ class WebSocketServer {
 
       socket.on('close', () => {
         this.socketList = this.socketList.filter(s => s !== socket)
-    })
+      })
     })
   }
 

@@ -23,7 +23,7 @@ if (passwordModif !== -1) {
       process.exit()
     })
     .catch(error => {
-      console.log(error)
+      console.error(error)
       process.exit(-1)
     })
 

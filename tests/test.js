@@ -33,11 +33,14 @@ function getAllFiles (dir) {
 async function execFunctions (file) {
   const obj = require(path.resolve(file))
   const methods = Object.getOwnPropertyNames(obj).filter(name => name.match(/Test$/) !== null)
-
+  console.log('************************************************************************')
+  console.log(`Execution des tests pour la classe : ${obj.name}`)
+  console.log('************************************************************************')
   if (typeof obj.tearsUp === 'function') obj.tearsUp()
   for (const method of methods) {
-    console.log(`Exécution de ${obj.name} pour ${method}`)
+    console.log(`=> Fonction ${method}`)
     await obj[method]()
+    console.log('')
   }
   if (typeof obj.tearsDown === 'function') obj.tearsDown()
 }
