@@ -9,7 +9,7 @@ const TimeManager = require('./assets/timemanager.js')
  * @property {Array} socketList : Tableau listant les sockets qui se connectent
  */
 class WebSocketServer {
-  constructor(server) {
+  constructor (server) {
     this.ws = new WebSocket.Server({ server })
     this.database = null
     this.timeManager = new TimeManager()
@@ -21,7 +21,7 @@ class WebSocketServer {
    * Enregistrement du gestionnaire de base de données
    * @param {Database} Database : gestionnaire de base de données
    */
-  registerDataBase(Database) {
+  registerDataBase (Database) {
     this.database = Database
     return this.database.getTimeSlotsFromDB().then((response) => {
       this.timeManager.init(response)
@@ -31,7 +31,7 @@ class WebSocketServer {
   /**
    * Initialisation du serveur de WebSocket
    */
-  init() {
+  init () {
     this.ws.on('connection', (socket) => {
       this.socketList.push(socket)
 
@@ -41,8 +41,8 @@ class WebSocketServer {
       })
 
       socket.on('close', () => {
-        this.socketList = this.socketList.filter(s => s !== socket);
-      });
+        this.socketList = this.socketList.filter(s => s !== socket)
+    })
     })
   }
 
@@ -51,22 +51,25 @@ class WebSocketServer {
    * @param {WebSocket} socket : socket émetteur d'un message
    * @param {WebSocket.Data} message : message reçu par WS
    */
-  route(socket, message) {
+  route (socket, message) {
     switch (message.head) {
+      // Ajout de la nouvelle commande passée
       case 'newOrder':
         return this.database.addOrder(message.datas).then((response) => {
           if (!response.warningStatus) {
-            let changedSlot = this.timeManager.setSlotUsed(message.datas)
+            const changedSlot = this.timeManager.setSlotUsed(message.datas)
             this.database.setTimeSlots(changedSlot)
+
+            // Notification des clients pour mettre à jour leurs timeSlot et aux pizzaïlos leurs commandes
             this.socketList.forEach(so => {
-              so.send(JSON.stringify({ "head": "updateSlotsRequired" }))
+              so.send(JSON.stringify({ head: 'updateSlotsRequired' }))
             })
-          }
-          else {
-            console.error(`Erreur lors de l'enregistrement de la commande en base de données.`)
+          } else {
+            console.error('Erreur lors de l\'enregistrement de la commande en base de données.')
           }
         })
 
+      // Récupération des timeSlots de disponibles
       case 'getTimeSlots':
         return new Promise(resolve => {
           let arrSlot
@@ -78,20 +81,21 @@ class WebSocketServer {
           resolve()
         })
 
+      // Récupération des commandes
       case 'getOrders':
         return this.database.getOrders().then((response) => {
-          socket.send(JSON.stringify({ "head": "updateOrders", "datas": this.timeManager.requestOrdToArray(response) }))
+          socket.send(JSON.stringify({ head: 'updateOrders', datas: this.timeManager.requestOrdToArray(response) }))
         })
 
+      // Mise à jour de l'état d'une commande
       case 'setState':
         return this.database.setState(message.datas.idOrder, message.datas.state).then((response) => {
           if (!response.warningStatus) {
             this.socketList.forEach(so => {
-              so.send(JSON.stringify({ "head": "updateState", "datas": { "idOrder": message.datas.idOrder, "state": message.datas.state } }))
+              so.send(JSON.stringify({ head: 'updateState', datas: { idOrder: message.datas.idOrder, state: message.datas.state } }))
             })
-          }
-          else {
-            console.error(`Erreur lors de la mise à jour en base de données de l'état de la commande.`)
+          } else {
+            console.error('Erreur lors de la mise à jour en base de données de l\'état de la commande.')
           }
         })
 

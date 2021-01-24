@@ -2,13 +2,7 @@
   <div>
     <div id="title">
       <span class="bold">Panier</span>
-      <button
-        id="closeShoppingCart"
-        class="shadow border"
-        @click="$emit('close')"
-      >
-        X
-      </button>
+      <button id="closeShoppingCart" class="shadow border" @click="$emit('close')">X</button>
     </div>
 
     <div v-if="popinDisplayed" class="center">
@@ -44,7 +38,7 @@
                 {{ opt }}
               </option>
             </select>
-            <div v-if="timeSlotsAvailable.length == 0" class="error italic small">Veuillez nous excuser, il semble qu'il n'y ai pas de créneau possible pour votre commande. Veuillez tenter avec moins de pizza, ou demain ;)</div>
+            <div v-if="timeSlotsAvailable.length == 0" class="error italic small">Veuillez nous excuser, il semble qu'il n'y ai pas de créneau possible pour votre commande. Veuillez tenter avec moins de pizzas, ou demain ヽ(*⌒▽⌒*)ﾉ</div>
           </div>
         </div>
 
@@ -135,9 +129,11 @@ export default {
       }
     },
     getTimeSlots() {
+      // Lors de la connexion au WS
       this.$ws.onopen = () => {
         this.$ws.send(JSON.stringify({ "head": "getTimeSlots" }))
       }
+      // Traitement des messages reçus
       this.$ws.onmessage = (msg) => {
         msg = JSON.parse(msg.data)
         switch (msg.head) {

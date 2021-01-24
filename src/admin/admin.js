@@ -7,5 +7,5 @@ Store.initWS()
 Vue.use(Store)
 
 new Vue({
-  render: h =>h(Admin)
+  render: h => h(Admin)
 }).$mount('#admin')

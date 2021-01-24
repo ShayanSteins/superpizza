@@ -4,7 +4,7 @@
  * @property {Array} pile : Tableau contenant l'ensemble des horaires de retrait pour une journée de travail
  */
 class TimeManager {
-  constructor() {
+  constructor () {
     this.timeslots = new Map()
     this.pile = []
   }
@@ -13,7 +13,7 @@ class TimeManager {
    * Initialisation des propriétés de la classe
    * @param {Array} datas : tableau d'objet { horaire, disponibilité }
    */
-  init(datas) {
+  init (datas) {
     for (const iterator of datas) {
       this.timeslots.set(iterator.hour, iterator.used)
       this.pile.push(iterator.hour)
@@ -25,9 +25,9 @@ class TimeManager {
    * @param {Object} order : Objet contenant l'ensemble des informations de la nouvelle commande
    * @returns {Array} : tableau listant les nom des slots modifiés
    */
-  setSlotUsed(order) {
-    let changedSlots = []
-    let index = this.pile.indexOf(order.timeSlot)
+  setSlotUsed (order) {
+    const changedSlots = []
+    const index = this.pile.indexOf(order.timeSlot)
     for (let i = index; i > index - order.totalQty; i--) {
       this.timeslots.set(this.pile[i], 1)
       changedSlots.push(this.pile[i])
@@ -40,14 +40,13 @@ class TimeManager {
    * @param {Number} qtyPizzas : quantité de pizza pour la commande
    * @returns {Array} : tableau contenant l'ensemble des horaires possibles
    */
-  getAvailableTimeSlots(qtyPizzas = 1) {
-    let availableSlots = []
+  getAvailableTimeSlots (qtyPizzas = 1) {
+    const availableSlots = []
     if (this.getEmptySlots().length >= qtyPizzas) { // Si il y au moins autant de slots disponibles que de pizzas en commande
-
       for (let i = 0; i < this.pile.length; i++) {
         if (i + qtyPizzas <= this.pile.length) { // Si il y a suffisamment de slot suivant (si l'on est pas à la fin de la pile)
           let isEnoughSpace = true
-          let studySlot = []
+          const studySlot = []
 
           for (let y = i; y < i + qtyPizzas; y++) { // Vérifie si les 'qtyPizzas' slots suivants sont disponibles
             if (this.timeslots.get(this.pile[y])) {
@@ -70,12 +69,12 @@ class TimeManager {
    * @param {Array} arrTS : tableau d'horaire
    * @returns {Array} : tableau filtré avec les horaires possibles
    */
-  checkCurrentHour(arrTS) {
-    let newArr = []
+  checkCurrentHour (arrTS) {
+    const newArr = []
     arrTS.forEach(timeslot => {
-      let hour = new Date().getUTCHours().toString().length < 2 ? '0' + (new Date().getUTCHours() + 1) : new Date().getUTCHours() + 1
-      let minutes = new Date().getUTCMinutes().toString().length < 2 ? '0' + new Date().getUTCMinutes() : new Date().getUTCMinutes()
-      let time = `${hour}:${minutes}`
+      const hour = new Date().getUTCHours().toString().length < 2 ? '0' + (new Date().getUTCHours() + 1) : new Date().getUTCHours() + 1
+      const minutes = new Date().getUTCMinutes().toString().length < 2 ? '0' + new Date().getUTCMinutes() : new Date().getUTCMinutes()
+      const time = `${hour}:${minutes}`
 
       if (time < timeslot)
         newArr.push(timeslot)
@@ -87,8 +86,8 @@ class TimeManager {
  * Retourne tous les slots non occupé (sans commande) de this.timeslots
  * @returns {Array} : tableau contenant les horaires diponibles
  */
-  getEmptySlots() {
-    let emptySlots = []
+  getEmptySlots () {
+    const emptySlots = []
     for (const [time, available] of this.timeslots) {
       if (!available)
         emptySlots.push(time)
@@ -101,17 +100,16 @@ class TimeManager {
    * @param {Array} dbResult : résultat de la requête SQL
    * @returns {Array} : Tableau formaté pour la mise à jour côté client
    */
-  requestOrdToArray(dbResult) {
-    let arr = []
+  requestOrdToArray (dbResult) {
+    const arr = []
     for (const line of dbResult) {
-      let check = arr.find(el => el.idOrder == line.idOrder)
+      const check = arr.find(el => el.idOrder === line.idOrder)
       if (check !== undefined) {
         check.pizzas.push({
           name: line.name,
           qty: line.qty
         })
-      }
-      else {
+      } else {
         arr.push({
           idOrder: line.idOrder,
           lastName: line.lastName,

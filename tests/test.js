@@ -3,13 +3,11 @@ const path = require('path')
 const dirTest = './tests/server/'
 const Runner = require('./runner.js')
 
-
-
-let filesName = getAllFiles(dirTest)
+const filesName = getAllFiles(dirTest)
 
 runAll()
 
-async function runAll() {
+async function runAll () {
   for (const file of filesName) {
     await execFunctions(file)
   }
@@ -19,8 +17,8 @@ async function runAll() {
   console.log('Test KO : ' + Runner.error)
 }
 
-function getAllFiles(dir) {
-  let allFiles = []
+function getAllFiles (dir) {
+  const allFiles = []
   const files = fs.readdirSync(dir, { withFileTypes: true })
 
   for (const file of files) {
@@ -32,7 +30,7 @@ function getAllFiles(dir) {
   return allFiles
 }
 
-async function execFunctions(file) {
+async function execFunctions (file) {
   const obj = require(path.resolve(file))
   const methods = Object.getOwnPropertyNames(obj).filter(name => name.match(/Test$/) !== null)
 

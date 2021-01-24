@@ -1,4 +1,4 @@
-export let Store = {
+export const Store = {
   menuPizzas: null,
   ws: null
 }
@@ -7,7 +7,7 @@ export let Store = {
  * Initialisation du WebSocket
  */
 Store.initWS = function () {
-  let proto = (document.location.protocol === "https:") ? "wss://" : "ws://"
+  const proto = (document.location.protocol === 'https:') ? 'wss://' : 'ws://'
   Store.ws = new WebSocket(proto + document.location.host)
 }
 
@@ -20,8 +20,8 @@ Store.install = function (Vue, options) {
   Vue.prototype.$ws = Store.ws
 
   /**
-   * Mise à jour du menu des pizas
-   * @param {Array} menu 
+   * Mise à jour/Enregistrement du menu des pizzas
+   * @param {Array} menu : Tableau contenant l'ensemble des pizzas constituant le menu
    */
   Vue.prototype.$menuPizzasSave = function (menu) {
     Store.menuPizzas = menu

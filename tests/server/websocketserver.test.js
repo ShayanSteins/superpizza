@@ -5,7 +5,7 @@ const TimeManager = require('../../server/assets/timemanager.js')
 
 // Mockup Date
 class Date {
-  constructor() {
+  constructor () {
     return {
       getUTCHours: () => Date.utcHours,
       getUTCMinutes: () => Date.utcMinutes
@@ -15,7 +15,7 @@ class Date {
 global.Date = Date
 
 class WebSocketServerTest {
-  static constructorTest() {
+  static constructorTest () {
     const wss = new WebSocketServer(new http.Server())
 
     run('ok', wss instanceof WebSocketServer)
@@ -24,10 +24,10 @@ class WebSocketServerTest {
     run('deepEqual', wss.socketList, [])
   }
 
-  static async registerDataBaseTest() {
+  static async registerDataBaseTest () {
     // Mockup
     const f = {
-      getTimeSlotsFromDB() { return Promise.resolve([{ hour: '18:10', used: 0 }, { hour: '18:20', used: 0 }]) }
+      getTimeSlotsFromDB () { return Promise.resolve([{ hour: '18:10', used: 0 }, { hour: '18:20', used: 0 }]) }
     }
 
     const wss = new WebSocketServer(new http.Server())
@@ -37,24 +37,24 @@ class WebSocketServerTest {
     run('deepEqual', wss.timeManager.pile, ['18:10', '18:20'])
   }
 
-  static initTest() {
+  static initTest () {
     const wss = new WebSocketServer(new http.Server())
     run('ok', wss.ws.listeners('connection').length === 1)
   }
 
-  static async routeTest() {
+  static async routeTest () {
     // Mockup
     const f = {
-      getTimeSlotsFromDB() { return Promise.resolve([{ hour: '18:10', used: 0 }, { hour: '18:20', used: 0 }, { hour: '18:30', used: 0 }]) },
-      getOrders() { return Promise.resolve([{ idOrder: 1 }, { idOrder: 1 }]) },
-      addOrder(datas) {
-        let response = {}
+      getTimeSlotsFromDB () { return Promise.resolve([{ hour: '18:10', used: 0 }, { hour: '18:20', used: 0 }, { hour: '18:30', used: 0 }]) },
+      getOrders () { return Promise.resolve([{ idOrder: 1 }, { idOrder: 1 }]) },
+      addOrder (datas) {
+        const response = {}
         if (datas.state === -1) response.warningStatus = true
         return Promise.resolve(response)
       },
-      setTimeSlots(changedSlot) { },
-      setState(idOrder, state) {
-        let response = {}
+      setTimeSlots (changedSlot) { },
+      setState (idOrder, state) {
+        const response = {}
         if (state === -1) response.warningStatus = true
         return Promise.resolve(response)
       }
@@ -62,7 +62,7 @@ class WebSocketServerTest {
 
     const socket = {
       lastMessage: null,
-      send(message) { socket.lastMessage = message }
+      send (message) { socket.lastMessage = message }
     }
 
     // Construction
@@ -73,7 +73,7 @@ class WebSocketServerTest {
     Date.utcMinutes = 0
 
     // newOrder
-    let message = {
+    const message = {
       head: 'newOrder',
       datas: {
         state: 0,
@@ -95,7 +95,7 @@ class WebSocketServerTest {
     message.datas = 2
     await wss.route(socket, message)
     run('equal', socket.lastMessage, '{"head":"updateSlots","datas":["18:30"]}')
-    
+
     delete message.datas
     await wss.route(socket, message)
     run('equal', socket.lastMessage, '{"head":"updateSlots","datas":["18:20","18:30"]}')
@@ -122,7 +122,6 @@ class WebSocketServerTest {
     message.head = 'notSupportedMessage'
     wss.route(socket, message)
     run('equal', socket.lastMessage, null)
-
   }
 }
 

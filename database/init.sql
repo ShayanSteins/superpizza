@@ -34,9 +34,14 @@ CREATE TABLE IF NOT EXISTS TimeSlot (
   used SMALLINT(1),
   PRIMARY KEY (hour));
 
+CREATE TABLE IF NOT EXISTS Credentials (
+  username VARCHAR(15),
+  hashedPassword VARCHAR(128),
+  salt VARCHAR(12)
+);
 
 INSERT INTO Pizzas (idPizza, name, description, price, img) 
-VALUES(0, 'Amora', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 9.00, 'amora'),
+VALUES (0, 'Amora', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 9.00, 'amora'),
 (1, 'Angry Pizz', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 10.00, 'angry'),
 (2, 'La Malédiction de Cthulhu', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 15.00, 'cthulhu'),
 (3, 'Dragon Fire', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 12.00, 'dragon'),
@@ -46,11 +51,13 @@ VALUES(0, 'Amora', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
 (7, 'Umbrella', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 15.00, 'umbrella');
 
 INSERT INTO TimeSlot (hour, used)
-VALUES('18:10',0),('18:20',0),('18:30',0),('18:40',0),('18:50',0),
+VALUES ('18:10',0),('18:20',0),('18:30',0),('18:40',0),('18:50',0),
 ('19:00',0),('19:10',0),('19:20',0),('19:30',0),('19:40',0),('19:50',0),
 ('20:00',0),('20:10',0),('20:20',0),('20:30',0),('20:40',0),('20:50',0),
 ('21:00',0),('21:10',0),('21:20',0),('21:30',0),('21:40',0),('21:50',0),
 ('22:00',0),('22:10',0),('22:20',0),('22:30',0),('22:40',0),('22:50',0),('23:00',0);
+
+INSERT INTO Credentials (username) VALUES ('admin');
 
 delimiter |
 

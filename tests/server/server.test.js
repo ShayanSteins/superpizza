@@ -4,8 +4,8 @@ const WebSocketServer = require('../../server/websocketserver.js')
 const wsServerSave = WebSocketServer
 
 class NewWebSocketServer {
-  constructor() { }
-  registerDataBase(database) { this.database = database }
+  constructor () { }
+  registerDataBase (database) { this.database = database }
 }
 
 module.children[1].exports = NewWebSocketServer
@@ -13,8 +13,8 @@ module.children[1].exports = NewWebSocketServer
 const Server = require('../../server/server.js')
 
 class ServerTest {
-  static constructorTest() {
-    let serv = new Server()
+  static constructorTest () {
+    const serv = new Server()
 
     run('ok', (serv instanceof Server))
     run('equal', serv.router, null)
@@ -23,27 +23,27 @@ class ServerTest {
     run('ok', (serv.server instanceof http.Server))
   }
 
-  static tearsDown() {
+  static tearsDown () {
     // Rétablissement du comportement d'origine
     module.children[1].exports = wsServerSave
   }
 
-  static registerDataBaseTest() {
-    //Mockup
+  static registerDataBaseTest () {
+    // Mockup
     const f = () => { }
-    let serv = new Server()
+    const serv = new Server()
 
     run('deepEqual', serv.registerDataBase(f), serv)
     run('deepEqual', serv.database, f)
   }
 
-  static registerRouterTest() {
-    //Mockup
+  static registerRouterTest () {
+    // Mockup
     const f = {
       database: null,
       registerDataBase: (database) => { f.database = database }
     }
-    let serv = new Server()
+    const serv = new Server()
 
     run('deepEqual', serv.registerRouter(f), serv)
     run('deepEqual', serv.router, f)
@@ -51,16 +51,16 @@ class ServerTest {
     run('equal', serv.server.listeners('request')[0].toString(), ((req, res) => { this.router.handle(req, res) }).toString())
   }
 
-  static registerWebSocketServerTest() {
-    let serv = new Server()
+  static registerWebSocketServerTest () {
+    const serv = new Server()
 
     run('deepEqual', serv.registerWebSocketServer(), serv)
     run('ok', serv.webSocketServer instanceof NewWebSocketServer)
     run('deepEqual', serv.webSocketServer.database, serv.database)
   }
 
-  static startTest() {
-    let serv = new Server()
+  static startTest () {
+    const serv = new Server()
     serv.start({ port: '4040' })
 
     run('ok', serv.server.listening)

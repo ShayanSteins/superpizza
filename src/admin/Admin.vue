@@ -47,13 +47,16 @@ export default {
     }
   },
   created() {
+    // Récupération de l'état du login dans le localStorage
     if (localStorage.getItem('logged') !== null)
       this.isLogged = localStorage.getItem('logged')
 
+    // Lors de la connexion au WS
     this.$ws.onopen = () => {
       this.$ws.send(JSON.stringify({ "head": "getOrders" }))
     }
 
+    // Traitement des messages reçus
     this.$ws.onmessage = (msg) => {
       let response = JSON.parse(msg.data)
 

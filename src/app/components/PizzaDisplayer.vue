@@ -48,10 +48,7 @@ export default {
   },
   methods: {
     checkQtyFormat() {
-      if (this.qty === '')
-        this.isIncorrectFormat = true
-      else
-        this.isIncorrectFormat = (this.qty < 0 || 30 < this.qty)
+      this.isIncorrectFormat = this.qty === '' || this.qty < 0 || 30 < this.qty
     },
     imagePath(fileName) {
       return images[fileName]
