@@ -12,6 +12,8 @@ async function runAll () {
     await execFunctions(file)
   }
   
+  console.log('************************************************************************')
+  console.log('************************************************************************')
   console.log('Total test passés : ' + (Runner.right + Runner.error))
   console.log('Test OK : ' + Runner.right)
   console.log('Test KO : ' + Runner.error)

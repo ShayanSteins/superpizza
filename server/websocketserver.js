@@ -30,9 +30,8 @@ class WebSocketServer {
    * Mise à jour des timeSlots et de la pile du timeManager
    */
   updateTimeManager () {
-    return this.database.getTimeSlotsFromDB().then((response) => {
-      this.timeManager.init(response)
-    })
+    return this.database.getTimeSlotsFromDB()
+      .then((response) => this.timeManager.init(response))
   }
 
   /**

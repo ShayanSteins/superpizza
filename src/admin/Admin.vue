@@ -6,16 +6,18 @@
 
     <div id="body">
       <form @submit.prevent="login" v-if="!isLogged" class="loginDiv">
+        <span class="error">{{ errorMsg }}</span>
         <input type="text" v-model="id" placeholder="Identifiant" required />
         <input type="password" v-model="pwd" placeholder="Password" required />
         <button>Connexion</button>
       </form>
-      <span>{{ errorMsg }}</span>
 
       <div v-if="isLogged">
         <div class="title bold"><span>Commandes à traiter</span></div>
         <div v-if="orders.length === 0" class="center">
-          <span>Pas encore de commande pour ce soir... Veuillez patienter =)</span>
+          <span
+            >Pas encore de commande pour ce soir... Veuillez patienter =)</span
+          >
         </div>
         <OrderDisplayer
           v-for="o in orders"
@@ -150,6 +152,12 @@ header {
   font-family: fantasy;
 }
 
+.error {
+  color: var(--main-red-color);
+  font-weight: bold;
+  padding-bottom: 0.5rem;
+  text-align: center;
+}
 .italic {
   font-style: italic;
 }

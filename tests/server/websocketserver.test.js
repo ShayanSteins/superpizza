@@ -31,10 +31,6 @@ class WebSocketServerTest {
     await wss.registerDataBase(f)
     // vérification de la mise à jour de la propriété database
     run('deepEqual', wss.database, f)
-    // vérification de la mise à jour de la propriété timeManager.timeslots
-    run('deepEqual', wss.timeManager.timeslots, new Map([['18:10', 0], ['18:20', 0]]))
-    // vérification de la mise à jour de la propriété timeManager.pile
-    run('deepEqual', wss.timeManager.pile, ['18:10', '18:20'])
   }
 
   static tearsUp () {
@@ -56,6 +52,30 @@ class WebSocketServerTest {
     // Rétablissement du comportement d'origine
     global.console.error = errorSave
     global.Date = dateSave
+  }
+
+  static async updateTimeManagerTest () {
+    // Mockup
+    const f = {
+      exec: 0,
+      getTimeSlotsFromDB () { 
+        if(f.exec === 0) {
+          f.exec++ 
+          return Promise.resolve([{ hour: '18:10', used: 0 }, { hour: '18:20', used: 0 }]) 
+        } else 
+          return Promise.resolve([{ hour: '19:10', used: 0 }, { hour: '19:20', used: 0 }]) 
+      }
+    }
+    
+    const wss = new WebSocketServer(new http.Server())
+    await wss.registerDataBase(f)
+
+    await wss.updateTimeManager()
+    // vérification de la mise à jour de la propriété timeManager.timeslots
+    run('deepEqual', wss.timeManager.timeslots, new Map([['19:10', 0], ['19:20', 0]]))
+    // vérification de la mise à jour de la propriété timeManager.pile
+    run('deepEqual', wss.timeManager.pile, ['19:10', '19:20'])
+
   }
 
   static initTest () {

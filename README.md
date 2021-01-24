@@ -10,6 +10,7 @@ SuperPizza est une web app Javascript de pizzaria fictive. Elle permet de comman
   4.2. [Base de données](#base-de-données)  
   4.3. [Application](#application)  
   4.4. [Lancement](#lancement)  
+  4.5. [Tests](#tests)
 4. [Utilisation](#utilisation)  
   4.1. [App consommateurs](#app-consommateurs)  
   4.2. [App pizzaïlo](#app-pizzaïolo)
@@ -48,7 +49,7 @@ J'utilise les bibliothèques [mariaDb](https://www.npmjs.com/package/mariadb) po
 
 J'utilise donc MariaDB, permettant l'utilisation d'évènements planifiés, étant openSource et facile d'utilisation.
 
-### Tests
+### Test
 
 Je n'utilise, là encore, aucun framework de test. J'ai donc développé un utilitaire pour tester la partie serveur.
 
@@ -126,15 +127,48 @@ Enfin lancer la commande :
 ```bash
 npm run build
 ```
+Le mot de passe de l'application Pizzaïolo nécessite d'être initialisé une première fois. Pour cela, saisir la commande suivante : 
+```bash
+npm run start -- --adminPassword <votrePassword>
+```
 ### Lancement
 Saisir la commande suivante : 
 ```bash
 npm run start
 ```
-Accéder à l'url http://<ip du serveur>:<port de la configuration>
+Accéder à l'url ```http://<ip du serveur>:<port de la configuration>```
+
+### Tests
+Afin de lancer les tests unitaires, il suffit de lancer
+```bash
+npm run test
+```
+Par défaut c'est le mode silent qui est activé. Pour avoir un rendu plus verbeux, il faudra soit modifier la commande dans package.json, soit lancer la commande node directement dans la console.
+
+La sortie de la commande devrait ressembler à ceci 
+```
+[...]
+************************************************************************
+Execution des tests pour la classe : WebSocketServerTest
+************************************************************************
+=> Fonction constructorTest
+OK OK OK OK 
+=> Fonction registerDataBaseTest
+OK 
+=> Fonction updateTimeManagerTest
+OK OK 
+=> Fonction initTest
+OK 
+=> Fonction routeTest
+OK OK OK OK OK OK OK OK 
+************************************************************************
+************************************************************************
+Total test passés : 79
+Test OK : 79
+Test KO : 0
+```
 
 ## Utilisation
-
 Superpizza dispose de deux interfaces disponibles aux adresses suivantes: 
 - Consommateurs : [https://superpizza.azurewebsites.net/](https://superpizza.azurewebsites.net/)
 - Pizzaïolo : [https://superpizza.azurewebsites.net/admin](https://superpizza.azurewebsites.net/admin)
@@ -153,8 +187,9 @@ Après avoir saisi l'url dans le navigateur, on obtiens l'interface suivante :
 On visualise ainsi le menu des pizzas, et le panier (pour la version pc). Ce dernier étant disponible sur smartphone via le bouton du caddie (n°1)
 Pour chaque pizza, on pourra visualiser une photo, une description, un prix unitaire, et un champs d'ajout.
 
-Pour ajouter des pizzas, il faut saisir la quantité de pizzas désirée dans les champs de texte puis appuyer sur le bouton "Ajouter"
-*La quantité doit être comprise entre 0 et 31*
+Pour ajouter des pizzas, il faut saisir la quantité de pizzas désirée dans les champs de texte puis appuyer sur le bouton "Ajouter".
+
+**Important** : *La quantité doit être comprise entre 0 et 31*
 
 ![Ajout pizzas](./documentation/pizzas_added.png)
 

@@ -15,6 +15,7 @@ class TimeManager {
    */
   init (datas) {
     this.pile = []
+    this.timeslots = new Map()
     for (const iterator of datas) {
       this.timeslots.set(iterator.hour, iterator.used)
       this.pile.push(iterator.hour)
@@ -44,17 +45,18 @@ class TimeManager {
   getAvailableTimeSlots (qtyPizzas = 1) {
     const availableSlots = []
     if (this.getEmptySlots().length >= qtyPizzas) { // Si il y au moins autant de slots disponibles que de pizzas en commande
-      for (let i = 0; i < this.pile.length; i++) {
-        if (i + qtyPizzas <= this.pile.length) { // Si il y a suffisamment de slot suivant (si l'on est pas à la fin de la pile)
+      let newPile = this.checkCurrentHour(this.pile)
+      for (let i = 0; i < newPile.length; i++) {
+        if (i + qtyPizzas <= newPile.length) { // Si il y a suffisamment de slot suivant (si l'on est pas à la fin de la pile)
           let isEnoughSpace = true
           const studySlot = []
 
           for (let y = i; y < i + qtyPizzas; y++) { // Vérifie si les 'qtyPizzas' slots suivants sont disponibles
-            if (this.timeslots.get(this.pile[y])) {
+            if (this.timeslots.get(newPile[y])) {
               isEnoughSpace = false
               break
             }
-            studySlot.push(this.pile[y])
+            studySlot.push(newPile[y])
           }
 
           if (isEnoughSpace) // Si on a trouvé assez d'espace
@@ -62,7 +64,7 @@ class TimeManager {
         }
       }
     }
-    return this.checkCurrentHour(availableSlots)
+    return availableSlots
   }
 
   /**

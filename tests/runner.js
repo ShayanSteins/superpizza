@@ -11,8 +11,8 @@ exports.run = (type, content, optionnal) => {
     process.stdout.write('OK ')
   } catch (err) {
     if (optionnal && process.env.silent !== "1") 
-      console.error(`!!! Test Failed : ${type} entre ${JSON.stringify(content)} et ${JSON.stringify(optionnal)}`)
-    console.error(err.stack)
+      console.log(`!!! Test Failed : ${type} entre ${JSON.stringify(content)} et ${JSON.stringify(optionnal)}`)
+    console.log(err.stack)
     exports.error++
   }
 }
