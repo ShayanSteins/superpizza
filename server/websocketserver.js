@@ -23,6 +23,13 @@ class WebSocketServer {
    */
   registerDataBase (Database) {
     this.database = Database
+    return this.updateTimeManager()
+  }
+
+  /**
+   * Mise à jour des timeSlots et de la pile du timeManager
+   */
+  updateTimeManager () {
     return this.database.getTimeSlotsFromDB().then((response) => {
       this.timeManager.init(response)
     })
@@ -33,8 +40,9 @@ class WebSocketServer {
    */
   init () {
     this.ws.on('connection', (socket) => {
+      this.updateTimeManager()
       this.socketList.push(socket)
-
+        
       socket.on('message', (message) => {
         message = JSON.parse(message)
         this.route(socket, message)

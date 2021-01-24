@@ -43,7 +43,7 @@ class RouterTest {
       }])
     }
 
-    const error404Html = '<html><body style="display: flex;background-color:  rgb(248, 248, 248);color: rgb(208 44 55);justify-content: center;align-items: center;font-family: monospace;"><h2>Error 404 : File "tests/html/errorPath" not found... (&deg;o&deg;)!</h2></body></html>'
+    const error404Html = '<html><body style="display: flex;background-color:  rgb(248, 248, 248);color: rgb(208 44 55);font-size: 2rem;justify-content: center;align-items: center;text-align: center;font-family: monospace;"><h2>Error 404 : File "tests/html/errorPath" not found... (&deg;o&deg;)!</h2></body></html>'
     const router = new Router({ distPath: 'tests/html/' })
     router.registerDataBase(f)
 

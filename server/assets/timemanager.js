@@ -14,6 +14,7 @@ class TimeManager {
    * @param {Array} datas : tableau d'objet { horaire, disponibilité }
    */
   init (datas) {
+    this.pile = []
     for (const iterator of datas) {
       this.timeslots.set(iterator.hour, iterator.used)
       this.pile.push(iterator.hour)

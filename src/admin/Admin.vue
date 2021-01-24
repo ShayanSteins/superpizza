@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="shadow">
-      <div id="headerTitle" class="bold center">Super Pizza</div>
+      <div id="headerTitle" class="bold center">Super Pizza - Admin</div>
     </header>
 
     <div id="body">

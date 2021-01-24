@@ -68,7 +68,7 @@ class Router {
       }
     } else if (!fs.existsSync(this.distPath + fileName)) { // Erreur 404
       res.writeHead(404, { 'Content-Type': 'text/html' })
-      res.end(`<html><body style="display: flex;background-color:  rgb(248, 248, 248);color: rgb(208 44 55);justify-content: center;align-items: center;font-family: monospace;"><h2>Error 404 : File "${this.distPath + fileName}" not found... (&deg;o&deg;)!</h2></body></html>`)
+      res.end(`<html><body style="display: flex;background-color:  rgb(248, 248, 248);color: rgb(208 44 55);font-size: 2rem;justify-content: center;align-items: center;text-align: center;font-family: monospace;"><h2>Error 404 : File "${this.distPath + fileName}" not found... (&deg;o&deg;)!</h2></body></html>`)
     } else { // Cas nominal des fichiers html, js, css, images
       res.writeHead(200, { 'Content-Type': mimeType[extension] })
       res.end(fs.readFileSync(this.distPath + fileName))

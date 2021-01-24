@@ -7,7 +7,7 @@
 
     <div v-if="popinDisplayed" class="center">
       <span>Merci pour votre commande, elle a été transmise à nos Pizzaïolos de
-      compétition !</span><br>
+      compétition ! Vous pourrez venir la récupérer à partir de {{ pickupTime }}.</span><br>
       <button @click="closePopin">Ok</button>
     </div>
 
@@ -95,7 +95,8 @@ export default {
     return {
       pizzas: this.order.pizzas,
       timeSlotsAvailable: [],
-      popinDisplayed: false
+      popinDisplayed: false,
+      pickupTime : ''
     }
   },
   props: {
@@ -113,7 +114,10 @@ export default {
   },
   methods: {
     updateOrderQty(idPizz, qty) {
-      this.order.pizzas.set(idPizz, qty)
+      if ( qty === '0' )
+        this.order.pizzas.delete(idPizz)
+      else
+        this.order.pizzas.set(idPizz, qty)
       this.updateTotalOrderPrice()
       this.$ws.send(JSON.stringify({ "head": "getTimeSlots", "datas": this.order.totalQty }))
     },
@@ -123,6 +127,7 @@ export default {
     },
     checkForm(e) {
       if (this.order.totalPrice > 0) {
+        this.pickupTime = this.order.timeSlot
         this.$ws.send(JSON.stringify({ "head": "newOrder", "datas": this.$changeObjectMaptoArray(this.order) }))
         this.popinDisplayed = true
         this.$emit('reset')
@@ -152,6 +157,7 @@ export default {
     },
     closePopin() {
       this.popinDisplayed = false
+      this.pickupTime = ''
     }
   }
 }
