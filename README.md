@@ -18,8 +18,7 @@ SuperPizza est une web app Javascript de pizzaria fictive. Elle permet de comman
 
 ## Informations générales
 
-SuperPizza a été temporairement déployée sur Azure. Elle est donc disponible à l'adresse suivante, pour une durée limitée : [https://superpizza.azurewebsites.net/](https://superpizza.azurewebsites.net/). 
-
+SuperPizza a été réalisé dans le cadre d'un test d'embauche sur 2 semaines. Elle a pour vocation de montrer de dont je suis capable en un temps donné, dans des conditions normales de développement.
 Elle a été testé avec 
 - Chrome v87.0.4280.141 et Edge v88.0.705.50 sur PC
 - Chrome Android v88.0.4324.93 et Safari iOs v14.3 sur smartphone
@@ -52,10 +51,6 @@ J'utilise donc MariaDB, permettant l'utilisation d'évènements planifiés, éta
 ### Test
 
 Je n'utilise, là encore, aucun framework de test. J'ai donc développé un utilitaire pour tester la partie serveur.
-
-### Déploiement
-
-J'ai fais le choix d'utiliser Azure, avec la période d'essaie gratuite. L'avantage étant qu'il ne nécessite que peu de configuration et le déploiement peut être directement lancé depuis [VS Code](https://code.visualstudio.com/).
 
 ## Installation
 
@@ -136,7 +131,8 @@ Saisir la commande suivante :
 ```bash
 npm run start
 ```
-Accéder à l'url ```http://<ip du serveur>:<port de la configuration>```
+Accéder à la partie consommateur via l'url ```http://<ip du serveur>:<port de la configuration>```
+Accéder à la partie pizzaïolo via l'url ```http://<ip du serveur>:<port de la configuration>/admin```
 
 ### Tests
 Afin de lancer les tests unitaires, il suffit de lancer
@@ -170,8 +166,8 @@ Test KO : 0
 
 ## Utilisation
 Superpizza dispose de deux interfaces disponibles aux adresses suivantes: 
-- Consommateurs : [https://superpizza.azurewebsites.net/](https://superpizza.azurewebsites.net/)
-- Pizzaïolo : [https://superpizza.azurewebsites.net/admin](https://superpizza.azurewebsites.net/admin)
+- Consommateurs : ```http://<ip du serveur>:<port de la configuration>```
+- Pizzaïolo : ```http://<ip du serveur>:<port de la configuration>/admin```
 
 Lorsque l'adresse saisie n'est pas correcte, le message suivant s'affiche : 
 
