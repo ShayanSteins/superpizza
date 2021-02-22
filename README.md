@@ -18,7 +18,7 @@ SuperPizza est une web app Javascript de pizzaria fictive. Elle permet de comman
 
 ## Informations générales
 
-SuperPizza a été réalisé dans le cadre d'un test d'embauche sur 2 semaines. Elle a pour vocation de montrer de dont je suis capable en un temps donné, dans des conditions normales de développement.
+SuperPizza a été réalisé dans le cadre d'un test d'embauche sur 2 semaines. Elle a pour vocation de montrer ce dont je suis capable en un temps donné, dans des conditions normales de développement.
 Elle a été testé avec 
 - Chrome v87.0.4280.141 et Edge v88.0.705.50 sur PC
 - Chrome Android v88.0.4324.93 et Safari iOs v14.3 sur smartphone
