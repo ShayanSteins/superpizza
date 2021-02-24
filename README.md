@@ -4,16 +4,17 @@ SuperPizza est une web app Javascript de pizzaria fictive. Elle permet de comman
 
 ## Table des matières
 1. [Informations générales](#informations-générales)
-2. [Choix technologiques](#choix-technologiques)
-3. [Installation](#installation)  
-  3.1. [Pré-requis](#pré-requis)  
-  3.2. [Base de données](#base-de-données)  
-  3.3. [Application](#application)  
-  3.4. [Lancement](#lancement)  
-  3.5. [Tests](#tests)
-4. [Utilisation](#utilisation)  
-  4.1. [App consommateurs](#app-consommateurs)  
-  4.2. [App pizzaïlo](#app-pizzaïolo)
+2. [Changelog](#changelog)
+3. [Choix technologiques](#choix-technologiques)
+4. [Installation](#installation)  
+  4.1. [Pré-requis](#pré-requis)  
+  4.2. [Base de données](#base-de-données)  
+  4.3. [Application](#application)  
+  4.4. [Lancement](#lancement)  
+  4.5. [Tests](#tests)
+5. [Utilisation](#utilisation)  
+  5.1. [App consommateurs](#app-consommateurs)  
+  5.2. [App pizzaïlo](#app-pizzaïolo)
 
 
 ## Informations générales
@@ -22,6 +23,16 @@ SuperPizza a été réalisé dans le cadre d'un test d'embauche sur 2 semaines. 
 Elle a été testé avec 
 - Chrome v87.0.4280.141 et Edge v88.0.705.50 sur PC
 - Chrome Android v88.0.4324.93 et Safari iOs v14.3 sur smartphone
+
+## Changelog
+
+v1.1 :
+
+- Suppression du déploiement Azure
+
+v1.0 :
+
+- Première version fonctionnelle avec accès au déploiement Azure
 
 
 ## Choix technologiques
